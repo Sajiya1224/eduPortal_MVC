@@ -1,0 +1,19 @@
+﻿@model List<Category>
+
+
+<div class="container my-4">
+
+    <h2 class="mb-3">Browse Categories</h2>
+    <h5 class="mb-3" style="color: rgba(200,200,200,1)">Discover your next learning adventure from our collection</h5>
+
+    <div class="category-scroll d-flex gap-3 mb-4">
+        <button class="cat-btn active">All Courses</button>
+        @foreach (var obj in Model)
+        {
+            <button class="cat-btn">@obj.Name</button>
+        }
+    </div>
+
+</div>
+
+

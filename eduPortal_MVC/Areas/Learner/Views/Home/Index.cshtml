@@ -1,0 +1,118 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Hero Section -->
+<div class="mt-0 hero-section d-flex align-items-center justify-content-between flex-column flex-md-row w-100 py-5"
+     style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
+
+    <!-- Left Content -->
+    <div class="container-fluid px-5 px-md-5">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <h1 class="fw-bold display-5 text-dark mb-3">
+                    Learn Without Limits
+                </h1>
+                <p class="text-muted mb-4 fs-5">
+                    Access thousands of courses from world-class instructors. <br />
+                    Build skills with courses, certificates, and degrees online from expert instructors.
+                </p>
+                <div class="d-flex justify-content-center justify-content-md-start gap-3">
+                    <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-secondary btn-lg px-4 py-2 shadow-sm">Browse Courses</a>
+                    <a asp-area="" asp-controller="" asp-action="" class="btn btn-outline-secondary btn-lg px-4 py-2">Become Instructor</a>
+
+                </div>
+            </div>
+
+            <!-- Right Image -->
+            <div class="col-md-6 mt-5 mt-md-0 text-center">
+                <img src="./hero_img.png" alt="Learning" class="img-fluid" style="max-width: 450px;">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Search bar  -->
+<div class="p-5">
+    <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;">
+        <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses">
+        <button class="btn btn-secondary" type="button">Search</button>
+    </div>
+</div>
+
+
+
+<!-- Browse by Category -->
+
+<div class="bg-light p-2">
+    <div class="container my-5">
+        <h2 class="mb-3 text-center">Browse by Category</h2>
+        <h5 class="mb-5 text-center text-muted">Explore our most popular course categories</h5>
+
+        <div class="row g-4">
+            @foreach (var obj in Model.Take(4))
+            {
+                <div class="col-md-3">
+                    <div class="card shadow-sm h-100 rounded-full">
+                        <div class="card-body p-4 text-center">
+                            <h5 class="card-title">@obj.Name</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="text-center m-4">
+            <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-outline-secondary btn-lg px-4 py-2">More</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Browse by Course -->
+
+<div class="p-2">
+    <div class="container my-5">
+        <h2 class="mb-3 text-center">Featured Courses</h2>
+        <h5 class="mb-5 text-center text-muted">Hand-picked courses to help you get started</h5>
+        <div class="row g-4">
+
+
+        </div>
+        <div class="text-center m-4">
+            <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-outline-secondary btn-lg px-4 py-2">View all</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Become an Instructor -->
+
+    <div class="mb-0 py-5" style="background-color: #0b0b1d; color: white;">
+        <div class="container text-center">
+
+           
+            <div class="mb-4">
+                <i class="bi bi-people" style="font-size: 90px;"></i>
+            </div>
+
+            <h2 class="fw-bold mb-3">Become an Instructor</h2>
+
+            <p class="mb-4" style="max-width: 650px; margin: auto;">
+                Share your knowledge with millions of students worldwide.
+                Join our community of expert instructors and start earning today.
+            </p>
+
+                  <a asp-area="" asp-controller="" asp-action="" class="btn btn-light btn-lg px-4 py-2">
+                Start Teaching Today
+            </a>
+
+        </div>
+    </div>
+
+
+
+
+
