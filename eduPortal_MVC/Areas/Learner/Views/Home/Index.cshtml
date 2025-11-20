@@ -20,14 +20,14 @@
                 </p>
                 <div class="d-flex justify-content-center justify-content-md-start gap-3">
                     <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-secondary btn-lg px-4 py-2 shadow-sm">Browse Courses</a>
-                    <a asp-area="" asp-controller="" asp-action="" class="btn btn-outline-secondary btn-lg px-4 py-2">Become Instructor</a>
+                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-Role="Instructor" class="btn btn-outline-secondary btn-lg px-4 py-2">Become an Instructor</a>
 
                 </div>
             </div>
 
             <!-- Right Image -->
             <div class="col-md-6 mt-5 mt-md-0 text-center">
-                <img src="./hero_img.png" alt="Learning" class="img-fluid" style="max-width: 450px;">
+                <img src="./hero_img.png" alt="Learning" class="img-fluid" style="max-width: 650px;">
             </div>
         </div>
     </div>
@@ -35,12 +35,19 @@
 </div>
 
 <!-- Search bar  -->
-<div class="p-5">
-    <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;">
-        <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses">
-        <button class="btn btn-secondary" type="button">Search</button>
-    </div>
+<div class="p-5 mt-3 mb-3">
+    <form class="d-flex mx-auto custom-search">
+        <input class="form-control rounded-pill search-input border-2"
+               type="search"
+               placeholder="Search courses..."
+               aria-label="Search">
+    </form>
 </div>
+
+    @* <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;"> *@
+    @*     <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses"> *@
+    @*     <button class="btn btn-secondary" type="button">Search</button> *@
+    @* </div> *@
 
 
 
@@ -105,7 +112,7 @@
                 Join our community of expert instructors and start earning today.
             </p>
 
-                  <a asp-area="" asp-controller="" asp-action="" class="btn btn-light btn-lg px-4 py-2">
+            <a asp-area="Identity" asp-page="/Account/Register" asp-route-Role="Instructor" class="btn btn-light btn-lg px-4 py-2">
                 Start Teaching Today
             </a>
 

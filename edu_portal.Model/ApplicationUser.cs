@@ -13,8 +13,11 @@ namespace eduPortal.Models
         [Required]
         public string Name { get; set; }
         public string Gender { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public string Country { get; set; }
-        public string ProfilePictureUrl { get; set; }
+        public string? CV { get; set; }
+        public string? DemoVid { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

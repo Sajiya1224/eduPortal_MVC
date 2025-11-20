@@ -2,10 +2,13 @@
 using eduPortal.DataAccess.dataContext;
 using eduPortal.Models;
 using Microsoft.AspNetCore.Mvc;
+using eduPortal.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eduPortal.Areas.Instructor.Controllers
 {
     [Area("Instructor")]
+    [Authorize(Roles = SD.Role_Instructor)]
     public class CourseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

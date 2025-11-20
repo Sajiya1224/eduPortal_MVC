@@ -79,3 +79,37 @@ body {
         border-color: black;
     }
 
+
+.custom-input {
+    background: #f6f6f6;
+    border: 1px solid #ececec;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+    .custom-input:focus {
+        border-color: #000;
+        box-shadow: none;
+    }
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.btn-dark {
+    background: #000;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.custom-search {
+    width: 800px; /* Adjust length */
+}
+
+.search-input {
+    border-radius: 50px !important;
+    padding: 10px 20px;
+}
+

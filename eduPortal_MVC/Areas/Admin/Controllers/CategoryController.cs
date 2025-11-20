@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using eduPortal.Models;
 using eduPortal.DataAccess.Repository.IRepository;
+using eduPortal.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace eduPortalWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -68,31 +71,33 @@ namespace eduPortalWeb.Areas.Admin.Controllers
         }
 
 
+    #region API CALLS
+    [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Category> categoryObj = _unitOfWork.Category.GetAll().ToList();
+            return Json(new {data = categoryObj});
+        }
+
+
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null || id == 0)
+            var categoryToBeDeleted = _unitOfWork.Category.Get(u => u.Id == id);
+           
+            if(categoryToBeDeleted == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Erroe while deleting" });
+
             }
-            Category? categoryObj = _unitOfWork.Category.Get(u => u.Id == id);
-            if (categoryObj == null)
-            {
-                return NotFound();
-            }
-            return View(categoryObj);
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int id)
-        {
-            Category? categoryObj = _unitOfWork.Category.Get(u => u.Id == id);
-            if (categoryObj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Category.Remove(categoryObj);
+
+            _unitOfWork.Category.Remove(categoryToBeDeleted);
             _unitOfWork.Save();
-            TempData["Success"] = "Category Deleted Successfully.";
-            return RedirectToAction("Index");
+
+            return Json(new { success = true, message = "Category deleted successfully" });
         }
+
+
+        #endregion
     }
 }

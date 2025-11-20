@@ -20,10 +20,12 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -101,7 +103,7 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null )
         {
             returnUrl ??= Url.Content("~/");
 
@@ -114,6 +116,21 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+
+                    
+                    //if (await _userManager.IsInRoleAsync(user, "Instructor"))
+                    //{
+                    //    return LocalRedirect("/Instructor/Dashboard");
+                    //}
+                    //else if (await _userManager.IsInRoleAsync(user, "Learner"))
+                    //{
+                    //    return LocalRedirect("/Home/Index");
+                    //}
+                    //else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    //{
+                    //    return LocalRedirect("/Admin/Dashboard");
+                    //}
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -1,11 +1,14 @@
 using System.Diagnostics;
 using eduPortal.DataAccess.Repository.IRepository;
 using eduPortal.Models;
+using eduPortal.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eduPortal.Areas.Learner.Controllers
 {
     [Area("Learner")]
+ 
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -12,6 +12,7 @@ namespace eduPortal.Models
         [MaxLength(50)]
         public string Name { get; set; }
         [DisplayName("Date")]
+        [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; }
     }
 }

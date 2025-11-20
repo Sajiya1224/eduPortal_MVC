@@ -17,7 +17,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -29,18 +31,21 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
+            IWebHostEnvironment webHostEnvironment,
             RoleManager<IdentityRole> roleManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
             _roleManager = roleManager;
             _userStore = userStore;
@@ -81,6 +86,7 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Invalid Email.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -102,17 +108,60 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [RegularExpression(@"^[A-Za-z][A-Za-z\s]*$", ErrorMessage = "Name must start with a letter and contain only letters and spaces.")]
+            public string Name { get; set; }
+            
+            [DataType(DataType.Date)]
+            public DateTime? DateOfBirth { get; set; }
+            public string Country { get; set; }
+            
+            public IFormFile CV { get; set; }
+            public IFormFile DemoVid { get; set; }
+            public string? Role { get; set; }
+            
+            [ValidateNever]
+
+            public IEnumerable<SelectListItem> RoleList { get; set; }
+            public string Gender { get; set; }
+            [ValidateNever]
+
+            public List<SelectListItem> GenderList { get; set; }
+            
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string role, string returnUrl = null)
         {
-            if(! _roleManager.RoleExistsAsync(SD.Role_User_Learner).GetAwaiter().GetResult())
+            if (!_roleManager.RoleExistsAsync(SD.Role_Learner).GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Learner)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Instructor)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Learner)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Instructor)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
             }
+
+            Input = new()
+            {
+                RoleList = _roleManager.Roles.Select(u => u.Name)
+                .Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                }),
+
+                GenderList = new List<SelectListItem>
+                {
+                new SelectListItem { Text = "Select", Value = "" },
+                new SelectListItem { Text = "Male", Value = "Male" },
+                new SelectListItem { Text = "Female", Value = "Female" },
+                new SelectListItem { Text = "Other", Value = "Other" }
+                },
+
+                Role = role
+            };
+
+            
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -124,15 +173,58 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.Name = Input.Name;
+                user.DateOfBirth = Input.DateOfBirth;
+                user.Country = Input.Country;
+                user.Gender = string.IsNullOrEmpty(Input.Gender) ? "NotSpecified" : Input.Gender;
+
+                if (Input.CV != null) 
+                {
+                    string cvFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.CV.FileName);
+                    string cvPath = Path.Combine(wwwRootPath, @"Teacher_Details\CV");
+
+                    using var cvfileStream = new FileStream(Path.Combine(cvPath, cvFileName), FileMode.Create) ;
+                    await Input.CV.CopyToAsync(cvfileStream);
+
+                    user.CV = "/Teacher_Details/CV" + cvFileName;
+                }
+
+                if (Input.DemoVid != null)
+                {
+                    string demoVidFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.CV.FileName);
+                    string demoVidPath = Path.Combine(wwwRootPath, @"Teacher_Details\TeachingDemoVid");
+
+                    using var demoVidfileStream = new FileStream(Path.Combine(demoVidPath, demoVidFileName), FileMode.Create);
+                    await Input.DemoVid.CopyToAsync(demoVidfileStream);
+
+                    user.DemoVid = "/Teacher_Details/TeachingDemoVid" + demoVidFileName;
+                }
+
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                   
+
+                    if (!String.IsNullOrEmpty(Input.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.Role_Learner);
+                    }
+                    
+
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -153,6 +245,20 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+
+                        //if (Input.Role == SD.Role_Instructor)
+                        //{
+                        //    return LocalRedirect("/Instructor/Dashboard");
+                        //}
+                        //else if (Input.Role == SD.Role_Learner)
+                        //{
+                        //    return LocalRedirect("/Home/Index");
+                        //}
+                        //else if (Input.Role == SD.Role_Admin)
+                        //{
+                        //    return LocalRedirect("/Admin/Dashboard");
+                        //}
+
                         return LocalRedirect(returnUrl);
                     }
                 }

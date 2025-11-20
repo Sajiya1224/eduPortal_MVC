@@ -8,8 +8,8 @@ namespace eduPortal.Utility
 {
     public static class SD
     {
-        public const string Role_User_Learner = "Learner";
-        public const string Role_User_Instructor = "Instructor";
-        public const string Role_User_Admin = "Admin";
+        public const string Role_Learner = "Learner";
+        public const string Role_Instructor = "Instructor";
+        public const string Role_Admin = "Admin";
     }
 }
