@@ -1,1 +1,106 @@
-﻿Instructor Dashboard
+﻿@{
+    ViewData["Title"] = "Instructor Dashboard";
+}
+<div class="container ">
+    <div class="row">
+        <div class="col-md-8 p-4">
+            <h2 class="fw-bold">Instructor Dashboard</h2>
+            <p class="text-muted">Track your teaching performance and manage courses</p>
+
+            <div class="row g-3 my-4">
+                <div class="col-md-3">
+                    <div class="card p-3 shadow-sm">
+                        <h6>Total Students</h6>
+                        <h3>20,777</h3>
+                        <small class="text-success">+1,234 this month</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 shadow-sm">
+                        <h6>Total Revenue</h6>
+                        <h3>$225K</h3>
+                        <small class="text-success">+15K this month</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 shadow-sm">
+                        <h6>Active Courses</h6>
+                        <h3>8</h3>
+                        <small class="text-muted">2 pending review</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3 shadow-sm">
+                        <h6>Avg. Rating</h6>
+                        <h3>4.8 ★</h3>
+                        <small class="text-muted">From 3,456 reviews</small>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="fw-semibold mt-4">My Courses</h4>
+            <div class="card p-3 shadow-sm my-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-2">
+                        <img src="/images/sample-course.jpg" class="img-fluid rounded" />
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Complete Web Development Bootcamp</h5>
+                        <span class="badge bg-success">Published</span>
+                        <div class="mt-2">
+                            <small>Students: 12,543</small><br />
+                            <small>Rating: ⭐ 4.8</small><br />
+                            <small>Revenue: $1124K</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a class="btn btn-outline-dark">View</a>
+                        <a class="btn btn-dark">Edit</a>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="fw-semibold mt-5">Recent Enrollments</h4>
+            <table class="table table-striped mt-3 shadow-sm">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Enrolled</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alice Johnson</td>
+                        <td>Web Development Bootcamp</td>
+                        <td>2 hours ago</td>
+                        <td><div class="progress" style="height:6px;"><div class="progress-bar" style="width: 15%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td>Bob Smith</td>
+                        <td>Advanced React & TypeScript</td>
+                        <td>5 hours ago</td>
+                        <td><div class="progress" style="height:6px;"><div class="progress-bar" style="width: 8%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td>Carol White</td>
+                        <td>Web Development Bootcamp</td>
+                        <td>1 day ago</td>
+                        <td><div class="progress" style="height:6px;"><div class="progress-bar" style="width: 42%;"></div></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-4 p-4">
+            <a asp-controller="course" asp-action="index" class="btn btn-dark">Manage Course</a>
+        </div>
+    </div>
+
+   
+
+</div>
+
+
+

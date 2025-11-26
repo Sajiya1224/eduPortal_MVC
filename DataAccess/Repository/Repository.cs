@@ -19,6 +19,12 @@ namespace eduPortal.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();
+
+            _db.videoCourses.Include(c => c.Sections).ThenInclude(s => s.Lectures).Include(c => c.Category);
+
+            //_db.courses.Include(u => u.Category).Include(u => u.CategoryId);
+            //_db.videoCourses.Include(u => u.Sections);
+            //_db.section.Include(u => u.Lectures);
         }
 
 
@@ -27,17 +33,31 @@ namespace eduPortal.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includeproperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
-            return query.FirstOrDefault();
+            if (!string.IsNullOrEmpty(includeproperties))
+            {
+                foreach (var property in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property.Trim());
+                }
+            }
+            return query.FirstOrDefault(filter);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeproperties = null)
         {
 
             IQueryable<T> query = dbSet;
+            if(!string.IsNullOrEmpty(includeproperties))
+            {
+                foreach (var property in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
             return query.ToList();
         }
 

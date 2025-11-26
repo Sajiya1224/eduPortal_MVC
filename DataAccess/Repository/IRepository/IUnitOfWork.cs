@@ -11,6 +11,8 @@ namespace eduPortal.DataAccess.Repository.IRepository
     {
         ICategoryRepository Category { get; }
         ICourseRepository Course { get; }
+        ISectionReposirory Section { get; }
+        ILectureRepository Lecture { get; }
         void Save();
     }
 }

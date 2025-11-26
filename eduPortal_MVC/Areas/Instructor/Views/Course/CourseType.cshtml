@@ -1,0 +1,80 @@
+﻿@model Course
+
+@{
+    ViewData["Title"] = "Create a New Course";
+}
+
+
+<div class="col-ms-6 m-5 text-end">
+    <a asp-controller="Instructor" asp-action="Dashboard" class="btn cat-btn text-decoration-none">Back to Dashboard</a>
+</div>
+
+<div class="container mt-5">
+
+    <h2 class="text-center fw-bold mb-2">Create a New Course</h2>
+    <p class="text-center text-muted mb-5">Choose the type of course you want to create</p>
+
+    <div class="row justify-content-center g-4">
+
+        <!-- QUIZ COURSE CARD -->
+        <div class="col-md-5">
+            <a asp-controller="Course" asp-action="CreateQuiz" class="text-decoration-none text-dark">
+                <div class="card shadow-sm p-4 border-1 hover-card">
+
+                    <div class="text-center mb-3">
+                        <i class="bi bi-book-fill" style="font-size: 40px; color:#4A73F3;"></i>
+                    </div>
+
+                    <h4 class="text-center fw-semibold">Quiz Course</h4>
+                    <p class="text-center text-muted">
+                        Create an interactive quiz-based course with multiple choice questions
+                    </p>
+
+                    <ul class="small mt-3 text-muted">
+                        <li>Multiple choice questions</li>
+                        <li>Automatic grading</li>
+                        <li>Instant feedback</li>
+                        <li>Perfect for assessments</li>
+                    </ul>
+
+                </div>
+            </a>
+        </div>
+
+        <!-- VIDEO COURSE CARD -->
+        <div class="col-md-5">
+            <a asp-controller="Course" asp-action="UpsertVideo" class="text-decoration-none text-dark">
+                <div class="card shadow-sm p-4 border-1 hover-card">
+
+                    <div class="text-center mb-3">
+                        <i class="bi bi-camera-video-fill" style="font-size: 40px; color:#B06BF3;"></i>
+                    </div>
+
+                    <h4 class="text-center fw-semibold">Video Course</h4>
+                    <p class="text-center text-muted">
+                        Create a comprehensive video-based course with lectures and resources
+                    </p>
+
+                    <ul class="small mt-3 text-muted">
+                        <li>Video lectures</li>
+                        <li>Downloadable resources</li>
+                        <li>Chapter organization</li>
+                        <li>Perfect for tutorials</li>
+                    </ul>
+
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}
+

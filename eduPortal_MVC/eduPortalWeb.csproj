@@ -26,6 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Courses\Videos\" />
+    <Folder Include="wwwroot\Courses\Thumbnails\" />
     <Folder Include="wwwroot\Teacher_Details\CV\" />
     <Folder Include="wwwroot\Teacher_Details\TeachingDemoVid\" />
   </ItemGroup>

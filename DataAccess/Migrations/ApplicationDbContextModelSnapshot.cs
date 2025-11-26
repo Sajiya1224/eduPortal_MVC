@@ -253,19 +253,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 11, 19, 9, 6, 36, 525, DateTimeKind.Utc).AddTicks(8872),
+                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1067),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 11, 19, 9, 6, 36, 525, DateTimeKind.Utc).AddTicks(8874),
+                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1070),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 11, 19, 9, 6, 36, 525, DateTimeKind.Utc).AddTicks(8875),
+                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1071),
                             Name = "Networking"
                         });
                 });
@@ -278,9 +278,17 @@ namespace eduPortal.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Duration")
                         .IsRequired()
@@ -293,9 +301,6 @@ namespace eduPortal.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -303,39 +308,134 @@ namespace eduPortal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("courses");
+
+                    b.HasDiscriminator().HasValue("Course");
+
+                    b.UseTphMappingStrategy();
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            CategoryId = 4,
                             Description = "A beginner-friendly course covering the basics of C# programming, syntax, and simple projects.",
                             Duration = "8h 30m",
                             IsPublished = false,
                             Level = "Beginner",
-                            Price = 199.0,
                             Title = "Introduction to Programming with C#"
                         },
                         new
                         {
                             Id = 2,
+                            CategoryId = 4,
                             Description = "Learn how to build modern web applications using ASP.NET Core MVC, Razor Pages, and Entity Framework.",
                             Duration = "12h 15m",
                             IsPublished = true,
                             Level = "Intermediate",
-                            Price = 299.0,
                             Title = "ASP.NET Core MVC for Web Development"
                         },
                         new
                         {
                             Id = 3,
+                            CategoryId = 4,
                             Description = "Master advanced SQL queries, stored procedures, and database optimization techniques using Microsoft SQL Server.",
                             Duration = "10h 45m",
                             IsPublished = false,
                             Level = "Advanced",
-                            Price = 249.0,
                             Title = "Advanced Database Management with SQL Server"
                         });
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Lecture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("LectureTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("lecture");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CorrectOption")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionA")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionB")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuizCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizCourseId");
+
+                    b.ToTable("Question");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Section", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SectionTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VideoCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VideoCourseId");
+
+                    b.ToTable("section");
                 });
 
             modelBuilder.Entity("eduPortal.Models.ApplicationUser", b =>
@@ -367,6 +467,38 @@ namespace eduPortal.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.QuizCourse", b =>
+                {
+                    b.HasBaseType("eduPortal.Models.Course");
+
+                    b.Property<int>("PassingScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMarks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("QuizCourse");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.VideoCourse", b =>
+                {
+                    b.HasBaseType("eduPortal.Models.Course");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("VideoCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -418,6 +550,65 @@ namespace eduPortal.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Course", b =>
+                {
+                    b.HasOne("eduPortal.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Lecture", b =>
+                {
+                    b.HasOne("eduPortal.Models.Section", "Section")
+                        .WithMany("Lectures")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Question", b =>
+                {
+                    b.HasOne("eduPortal.Models.QuizCourse", "QuizCourse")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuizCourse");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Section", b =>
+                {
+                    b.HasOne("eduPortal.Models.VideoCourse", "VideoCourse")
+                        .WithMany("Sections")
+                        .HasForeignKey("VideoCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VideoCourse");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.Section", b =>
+                {
+                    b.Navigation("Lectures");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.QuizCourse", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.VideoCourse", b =>
+                {
+                    b.Navigation("Sections");
                 });
 #pragma warning restore 612, 618
         }

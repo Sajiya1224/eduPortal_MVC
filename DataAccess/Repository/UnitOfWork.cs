@@ -1,7 +1,6 @@
 ﻿using eduPortal.DataAccess.Repository.IRepository;
 using eduPortal.DataAccess.dataContext;
 using eduPortal.DataAccess.Repository;
-using eduPortal.DataAccess.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +16,16 @@ namespace eduPortal.DataAccess.Repository
         private readonly ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
         public ICourseRepository Course { get; private set; }
+        public ISectionReposirory Section { get; private set; }
+        public ILectureRepository Lecture { get; private set; }
         public UnitOfWork(ApplicationDbContext db) 
         {
 
             _db = db;
             Category = new CategoryRepository(_db);
             Course = new CourseRepository(_db);
+            Section = new SectionRepository(_db);
+            Lecture = new LectureRepository(_db);
 
         }
         public void Save()

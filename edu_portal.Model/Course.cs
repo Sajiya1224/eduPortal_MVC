@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eduPortal.Models
 {
@@ -12,15 +14,19 @@ namespace eduPortal.Models
         public string Title { get; set; }
         [MinLength(20)]
         public string Description { get; set; }
-        [Required]
-        [Range(1, 1000)]
-        public double Price { get; set; }
         public string Duration { get; set; }
         [Required]
+        [RegularExpression("Beginner|Intermediate|Advanced")]
         public string Level { get; set; }
         public bool IsPublished { get; set; } = false;
 
-        //public int CategoryId { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
+
+        
+
         //public int InstructorId { get; set; }
         // foreignkey
     }

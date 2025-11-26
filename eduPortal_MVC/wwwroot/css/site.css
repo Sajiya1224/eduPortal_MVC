@@ -113,3 +113,13 @@ body {
     padding: 10px 20px;
 }
 
+
+.hover-card {
+    transition: all 0.2s ease-in-out;
+    border-radius: 14px;
+}
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+    }

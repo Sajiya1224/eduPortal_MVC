@@ -118,19 +118,19 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
 
-                    
-                    //if (await _userManager.IsInRoleAsync(user, "Instructor"))
-                    //{
-                    //    return LocalRedirect("/Instructor/Dashboard");
-                    //}
-                    //else if (await _userManager.IsInRoleAsync(user, "Learner"))
-                    //{
-                    //    return LocalRedirect("/Home/Index");
-                    //}
-                    //else if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    //{
-                    //    return LocalRedirect("/Admin/Dashboard");
-                    //}
+
+                    if (await _userManager.IsInRoleAsync(user, "Instructor"))
+                    {
+                        return LocalRedirect("/Instructor/Instructor/Dashboard");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Learner"))
+                    {
+                        return LocalRedirect("Learner/Home/Index");
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return LocalRedirect("/Admin/Admin/Dashboard");
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

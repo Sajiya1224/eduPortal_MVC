@@ -25,9 +25,10 @@
                         @if(User.IsInRole(SD.Role_Instructor))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light btn btn-dark btn-lg px-4 py-2 shadow-sm" asp-area="INstructor" asp-controller="Course" asp-action="Create"><i class="bi bi-plus-circle"></i> Create Course</a>
+                                <a class="nav-link text-light btn btn-dark btn-lg px-4 py-2 shadow-sm" asp-area="Instructor" asp-controller="Course" asp-action="CourseType"><i class="bi bi-plus-circle"></i> Create Course</a>
                             </li>
                         }
+
                         @if (User.IsInRole(SD.Role_Admin))
                         {
                             <form class="d-flex mx-auto custom-search">
@@ -38,10 +39,8 @@
                             </form> 
                             
                         }
-                    
 
-                    
-                    @if(User.IsInRole(SD.Role_Learner))
+                        @if(User.IsInRole(SD.Role_Learner))
                         {
                             <form class="d-flex mx-auto custom-search">
                                 <input class="form-control rounded-pill search-input"
@@ -54,7 +53,7 @@
                                 <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Instructor" asp-controller="Course" asp-action="Index">Courses</a>
+                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse">Courses</a>
                             </li>
                               <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Learner" asp-controller="" asp-action="">My Enrollement</a>  
@@ -161,6 +160,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tiny.cloud/1/a6771irdevyozaylz5a6whx1para7xyhf2bsr07yfv04ltmx/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="//cdn.datatables.net/2.3.5/js/dataTables.min.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

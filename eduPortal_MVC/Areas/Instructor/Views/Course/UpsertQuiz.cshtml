@@ -1,0 +1,309 @@
+﻿@model QuizCourseVM
+
+
+
+<!--Back to Create page link-->
+<div class="col-ms-6 m-5 text-end">
+	<a asp-controller="Course" asp-action="Create" class="btn cat-btn text-decoration-none">Back to Course Type</a>
+</div>
+
+
+<!--Basic Information Form-->
+
+<div class="container col-12" >
+	<h2 class="py-2">Create Quiz Course	</h2>
+	<p class="text-muted"> Design an engaging quiz-based learning experience</p>
+</div>
+
+<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
+	<div class="col-12">
+		<p class="p-2">Basic Information</p>	
+	</div>
+	<div class="row g-3">
+
+	<div class="form-floating py-2 col-12">	
+		<input asp-for="QuizCourse.Title" class="form-control border-0 shadow" />
+			<label asp-for="QuizCourse.Title" class="ms-2"></label>
+			<span asp-validation-for="QuizCourse.Title" class="text-danger"></span>
+	</div>
+
+	<div class="form-floating py-2 col-12">
+			<input asp-for="QuizCourse.Description" class="form-control border-0 shadow" />
+			<label asp-for="QuizCourse.Description" class="ms-2"></label>
+			<span asp-validation-for="QuizCourse.Description" class="text-danger"></span>
+	</div>
+
+	<div class="form-floating py-2 col-6">
+			<select asp-for="QuizCourse.CategoryId" asp-items="@Model.CategoryList"
+				class="form-select border-0 shadow">
+			<option disabled selected>Select category</option>
+		</select>
+			<label asp-for="QuizCourse.CategoryId"></label>
+	</div>
+
+		<div class="form-floating py-2 col-6">
+			<select class="form-select border-0 shadow">
+				<option disabled selected>Select difficulty</option>
+				<option>Beginner</option> 
+				<option>Intermediate</option> 
+				<option>Advanced</option> 
+		</select>
+			<label asp-for="QuizCourse.Level" class="ms-2">Difficulty Level</label>
+		</div>  
+	<div class="form-floating py-2 col-12">
+
+			<input asp-for="QuizCourse.Duration" class="form-control border-0 shadow" />
+			<label asp-for="QuizCourse.Duration" class="ms-2"></label>
+			<span asp-validation-for="QuizCourse.Duration" class="text-danger"></span>
+	</div>
+
+	</div>
+</div>
+
+<div class="container  col-12">
+	<p style="font-size:30px">Quiz Question</p>
+	<div class="col-ms-6 m-2 text-end">
+		<button class="btn cat-btn text-decoration-none">Add Question</button>
+	</div>
+</div>
+
+
+<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
+	<div class="col-12">
+		<p class="p-2">Question 1</p>
+	</div>
+	<div class="row g-3">
+             <div id="questions-container"> 
+
+                         <!-- Question Text -->
+				<div class="form-floating py-2 col-12">
+
+					<input class="form-control border-0 shadow" placeholder="Enter your question..." />
+					<label class="ms-2">Question Text</label>
+					
+				</div>
+
+
+                         <!-- Answer Options -->
+
+			 <div class="row g-3">
+
+				<p class="col-12">Answer Option</p>
+				<div class="form-floating col-12">
+					<input class="form-control border-0 shadow" placeholder="your option" />
+					<label class="ms-2">A.</label>
+				</div>
+
+				<div class="form-floating col-12">
+					<input class="form-control border-0 shadow" placeholder="your option" />
+					<label class="ms-2">B.</label>
+				</div>
+
+				<div class="form-floating col-12">
+					<input class="form-control border-0 shadow" placeholder="your option" />
+					<label class="ms-2">C.</label>
+				</div>
+
+				<div class="form-floating col-12">
+					<input class="form-control border-0 shadow" placeholder="your option" />
+					<label class="ms-2">D.</label>
+				</div>
+			 </div>
+                         <!-- Correct Answer Dropdown -->
+
+			 <div class="form-floating py-2 col-12">
+				<select class="form-select border-0 shadow">
+					<option disabled selected>Select difficulty</option>
+					<option value="A">Option A</option>
+					<option value="B">Option B</option>
+					<option value="C">Option C</option>
+					<option value="D">Option D</option>
+				</select>
+				<label class="ms-2">Correct Answer</label>
+			 </div>
+
+			 </div>
+		
+	</div>
+
+	<div class="col-ms-12 m-2 text-end">
+		<button class="btn btn-dark text-decoration-none">Create</button>
+	</div>	
+</div>
+
+
+
+
+
+
+
+@section Scripts{
+	@{
+		<partial name="_ValidationScriptsPartial"/>
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* <div class="container mt-5 mb-5"> *@
+
+@*     <!-- Back link --> *@
+@*     <a asp-controller="Course" asp-action="Create" class="text-decoration-none text-muted mb-3 d-inline-block"> *@
+@*         <i class="bi bi-arrow-left"></i> Back to Course Types *@
+@*     </a> *@
+
+@*     <!-- HEADER --> *@
+@*     <h2 class="fw-bold text-center">Create Quiz Course</h2> *@
+@*     <p class="text-center text-muted mb-5"> *@
+@*         Design an engaging quiz-based learning experience *@
+@*     </p> *@
+
+@*     <!-- BASIC INFORMATION CARD --> *@
+@*     <div class="card shadow-sm border-0 p-4 mb-4" style="border-radius: 14px;"> *@
+@*         <h5 class="fw-semibold mb-4">Basic Information</h5> *@
+
+@*         <div class="row g-3"> *@
+@*             <div class="col-12"> *@
+@*                 <label asp-for="@Model.Course.Title" class="form-control fw-semibold">Course Title</label> *@
+@*                 <input asp-for="@Model.Course.Title" class="form-control form-control-lg" placeholder="e.g., Introduction to JavaScript" /> *@
+@*                 <span asp-validation-for="@Model.Course.Title" class="text-danger"></span> *@
+@*             </div> *@
+
+@*             <div class="col-12"> *@
+@*                 <label asp-for="@Model.Course.Description" class="form-control fw-semibold">Course Description</label> *@
+@*                 <input asp-for="@Model.Course.Description" class="form-control form-control-lg" placeholder="Describe what students will learn..." /> *@
+@*                 <span asp-validation-for="@Model.Course.Description" class="text-danger"></span> *@
+@*             </div> *@
+
+@*             <div class="col-md-6"> *@
+@*                 <label asp-for="@Model.Course.CategoryId" class="form-control fw-semibold">Category</label> *@
+@*                 <select asp-for="@Model.Course.CategoryId" asp-items="@Model.CategoryList" class="form-select form-select-lg"> *@
+@*                     <option disabled selected>Select category</option> *@
+@*                 </select> *@
+@*                 <span asp-validation-for="@Model.Course.CategoryId" class="text-danger"></span> *@
+@*             </div> *@
+
+@*             <div class="col-md-6"> *@
+@*                 <label class="form-control fw-semibold">Difficulty Level</label> *@
+@*                 <select class="form-select form-select-lg"> *@
+@*                     <option selected>Select difficulty</option> *@
+@*                     <option>Beginner</option> *@
+@*                     <option>Intermediate</option> *@
+@*                     <option>Advanced</option> *@
+@*                 </select> *@
+@*             </div> *@
+
+@*             <div class="col-md-6"> *@
+@*                 <label asp-for="@Model.Course.Duration" class="form-control fw-semibold">Estimated Duration (minutes)</label> *@
+@*                 <input asp-for="@Model.Course.Duration" class="form-control form-control-lg" placeholder="30" /> *@
+@*                 <span asp-validation-for="@Model.Course.Duration" class="text-danger"></span> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+
+
+@*     <div class="container mt-4"> *@
+@*         <h3 class="mb-4">Quiz Questions</h3> *@
+
+@*         <form method="post"> *@
+@*             <div id="questions-container"> *@
+
+                @* @for (int i = 0; i < Model.Questions.Count; i++) *@ 
+                @* { *@ 
+@*                     <div class="card mb-4 p-4 shadow-sm"> *@
+@*                         <h5 class="mb-3">Question</h5> *@
+
+@*                         <!-- Question Text --> *@
+@*                         <div class="mb-3"> *@
+@*                         <label class="form-control">Question Text</label> *@
+@*                             <input  *@
+@*                                    class="form-control" *@
+@*                                    placeholder="Enter your question..." /> *@
+@*                         </div> *@
+
+@*                         <!-- Answer Options --> *@
+@*                     <label class="form-control">Answer Options</label> *@
+
+@*                         <div class="mb-2 d-flex align-items-center"> *@
+@*                             <span class="me-2 fw-bold">A.</span> *@
+@*                             <input  class="form-control" placeholder="Option A" /> *@
+@*                         </div> *@
+
+@*                         <div class="mb-2 d-flex align-items-center"> *@
+@*                             <span class="me-2 fw-bold">B.</span> *@
+@*                             <input class="form-control" placeholder="Option B" /> *@
+@*                         </div> *@
+
+@*                         <div class="mb-2 d-flex align-items-center"> *@
+@*                             <span class="me-2 fw-bold">C.</span> *@
+@*                             <input class="form-control" placeholder="Option C" /> *@
+@*                         </div> *@
+
+@*                         <div class="mb-3 d-flex align-items-center"> *@
+@*                             <span class="me-2 fw-bold">D.</span> *@
+@*                             <input class="form-control" placeholder="Option D" /> *@
+@*                         </div> *@
+
+@*                         <!-- Correct Answer Dropdown --> *@
+@*                         <div class="mb-3"> *@
+@*                         <label class="form-control">Correct Answer</label> *@
+@*                             <select class="form-select"> *@
+@*                                 <option value="A">Option A</option> *@
+@*                                 <option value="B">Option B</option> *@
+@*                                 <option value="C">Option C</option> *@
+@*                                 <option value="D">Option D</option> *@
+@*                             </select> *@
+@*                         </div> *@
+@*                     </div> *@
+                 @* } *@ 
+
+@*             </div> *@
+
+@*             <!-- Add Question Button --> *@
+@*             <button type="button" id="add-question-btn" class="btn btn-outline-primary mb-3"> *@
+@*                 + Add Question *@
+@*             </button> *@
+
+@*             <div> *@
+@*                 <button type="submit" class="btn btn-dark">Create Quiz Course</button> *@
+@*                 <a asp-action="Index" class="btn btn-secondary">Cancel</a> *@
+@*             </div> *@
+@*         </form> *@
+@*     </div> *@
+@* </div> *@
+
+
+

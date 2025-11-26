@@ -15,6 +15,10 @@ namespace eduPortal.DataAccess.dataContext
         public DbSet<Course> courses { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers{ get; set; }
+        public DbSet<VideoCourse> videoCourses{ get; set; }
+        public DbSet<QuizCourse> quizCourses { get; set; }
+        public DbSet<Section> section { get; set; }
+        public DbSet<Lecture> lecture { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -27,30 +31,30 @@ namespace eduPortal.DataAccess.dataContext
                   Id = 1,
                   Title = "Introduction to Programming with C#",
                   Description = "A beginner-friendly course covering the basics of C# programming, syntax, and simple projects.",
-                  Price = 199,
                   Duration = "8h 30m",
                   Level = "Beginner",
-                  IsPublished = false
+                  IsPublished = false,
+                  CategoryId = 4
               },
                 new Course
                 {
                     Id = 2,
                     Title = "ASP.NET Core MVC for Web Development",
                     Description = "Learn how to build modern web applications using ASP.NET Core MVC, Razor Pages, and Entity Framework.",
-                    Price = 299,
                     Duration = "12h 15m",
                     Level = "Intermediate",
-                    IsPublished = true
+                    IsPublished = true,
+                    CategoryId = 4
                 },
                 new Course
                 {
                     Id = 3,
                     Title = "Advanced Database Management with SQL Server",
                     Description = "Master advanced SQL queries, stored procedures, and database optimization techniques using Microsoft SQL Server.",
-                    Price = 249,
                     Duration = "10h 45m",
                     Level = "Advanced",
-                    IsPublished = false
+                    IsPublished = false,
+                    CategoryId = 4
                 }
             
             );

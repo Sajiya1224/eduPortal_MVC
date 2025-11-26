@@ -4,6 +4,10 @@
 }
 
 
+<div class="col-ms-6 m-5 text-end">
+    <a asp-controller="Instructor" asp-action="Dashboard" class="btn cat-btn text-decoration-none">Back to Dashboard</a>
+</div>
+
 <div class="container">
 
     <div class=" m-lg-0 py-3 text-center">
@@ -11,7 +15,7 @@
     </div>
 
     <div class="col-12 p-2 text-end">
-        <a class="btn btn-dark" asp-controller="" asp-action=""> <i class="bi bi-plus-circle"></i> Add Course</a>
+        <a class="btn btn-dark" asp-controller="Course" asp-action="CourseType"> <i class="bi bi-plus-circle"></i> Add Course</a>
     </div>
 
 
@@ -20,7 +24,6 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Price</th>
                     <th>Duration</th>
                     <th>Level</th>
                     <th>IsPublished</th>
@@ -32,15 +35,14 @@
                 {
                     <tr>
                         <td>@obj.Title</td>
-                        <td>@obj.Price</td>
                         <td>@obj.Duration</td>
                         <td>@obj.Level</td>
                         <td>@obj.IsPublished</td>
                         <td>
-                            <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-secondary">
+                            <a asp-controller="Course" asp-action="UpsertVideo" asp-route-id="@obj.Id" class="btn btn-secondary">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
-                            <a asp-controller="Category" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger">
+                            <a asp-controller="Course" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger">
                                 <i class="bi bi-trash3-fill"></i> Delete
                             </a>
                         </td>

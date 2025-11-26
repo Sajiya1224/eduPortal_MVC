@@ -246,18 +246,18 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
 
-                        //if (Input.Role == SD.Role_Instructor)
-                        //{
-                        //    return LocalRedirect("/Instructor/Dashboard");
-                        //}
-                        //else if (Input.Role == SD.Role_Learner)
-                        //{
-                        //    return LocalRedirect("/Home/Index");
-                        //}
-                        //else if (Input.Role == SD.Role_Admin)
-                        //{
-                        //    return LocalRedirect("/Admin/Dashboard");
-                        //}
+                        if (Input.Role == SD.Role_Instructor)
+                        {
+                            return LocalRedirect("/Instructor/Instructor/Dashboard");
+                        }
+                        else if (Input.Role == SD.Role_Learner)
+                        {
+                            return LocalRedirect("/Learner/Home/Index");
+                        }
+                        else if (Input.Role == SD.Role_Admin)
+                        {
+                            return LocalRedirect("/Admin/Admin/Dashboard");
+                        }
 
                         return LocalRedirect(returnUrl);
                     }

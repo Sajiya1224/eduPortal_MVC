@@ -21,6 +21,7 @@ namespace eduPortal.DataAccess.Repository
         }
         public void Update(Course obj)
         {
+
             _db.courses.Update(obj);
         }
     }
