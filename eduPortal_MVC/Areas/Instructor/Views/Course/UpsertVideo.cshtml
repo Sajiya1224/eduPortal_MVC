@@ -8,150 +8,243 @@
 	<a asp-controller="Course" asp-action="CourseType" class="btn cat-btn text-decoration-none">Back to Course Type</a>
 </div>
 
-<form method="post" enctype="multipart/form-data">
-	<input asp-for="VideoCourseVm.Id" hidden />
-<!--Basic Information Form-->
-	
+<div class="container col-12">
+	<form method="post" enctype="multipart/form-data">
+		<input asp-for="VideoCourseVm.Id" hidden />
+		<input asp-for="VideoCourseVm.ApplicationUserId" hidden />
+		<!--Basic Information Form-->
 
-	<div class="container col-12">
-		<h2 class="py-2">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Video Course</h2>
-		<p class="text-muted">@(Model.VideoCourseVm.Id != 0 ? "Edit and Update your courses easily" : "Build a comprehensive video-based learning experience")</p>
-	</div>
 
-	<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
-		<div class="col-12">
-			<p class="p-2">Basic Information</p>
-			<div class="row">
-				<div class="col-10">
+		<div class="container col-12">
+			<h2 class="py-2">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Video Course</h2>
+			<p class="text-muted">@(Model.VideoCourseVm.Id != 0 ? "Edit and Update your courses easily" : "Build a comprehensive video-based learning experience")</p>
+		</div>
 
-					<div class="form-floating py-2 col-10">
-						<input asp-for="VideoCourseVm.Title" class="form-control border-0 shadow" />
-						<label asp-for="VideoCourseVm.Title" class="ms-2"></label>
-						<span asp-validation-for="VideoCourseVm.Title" class="text-danger"></span>
+		<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
+			<div class="col-12">
+				<p class="p-2">Basic Information</p>
+				<div class="row">
+					<div class="col-10">
+
+						<div class="form-floating py-2 col-10">
+							<input asp-for="VideoCourseVm.Title" class="form-control border-0 shadow" />
+							<label asp-for="VideoCourseVm.Title" class="ms-2"></label>
+							<span asp-validation-for="VideoCourseVm.Title" class="text-danger"></span>
+						</div>
+
+						<div class="form-floating py-2 col-10">
+							<textarea asp-for="VideoCourseVm.Description" class="form-control border-0 shadow"></textarea>
+							<label asp-for="VideoCourseVm.Description" class="ms-2"></label>
+
+						</div>
+
+						<div class="form-floating py-2 col-10">
+							<input type="file" name="imgFile" asp-for="VideoCourseVm.ThumbnailUrl" class="form-control border-0 shadow" />
+							<label asp-for="VideoCourseVm.ThumbnailUrl" class="ms-2"></label>
+							<span asp-validation-for="VideoCourseVm.ThumbnailUrl" class="text-danger"></span>
+						</div>
+
+						<div class="form-floating py-2 col-10">
+							<select asp-for="@Model.VideoCourseVm.CategoryId" asp-items="@Model.CategoryList"
+									class="form-select border-0 shadow">
+								<option value="" disabled selected>Select category</option>
+							</select>
+							<label asp-for="@Model.VideoCourseVm.CategoryId"></label>
+							<span asp-validation-for="@Model.VideoCourseVm.CategoryId" class="text-danger"></span>
+						</div>
+
+						<div class="form-floating py-2 col-10">
+							<select asp-for="VideoCourseVm.Level" class="form-select border-0 shadow">
+								<option value="" disabled selected>Select difficulty</option>
+								<option value="Beginner">Beginner</option>
+								<option value="Intermediate">Intermediate</option>
+								<option value="Advanced">Advanced</option>
+							</select>
+							<label asp-for="VideoCourseVm.Level" class="ms-2">Difficulty Level</label>
+						</div>
+
+						<div class="form-floating py-2 col-10">
+
+							<input asp-for="VideoCourseVm.Price" class="form-control border-0 shadow" />
+							<label asp-for="VideoCourseVm.Price" class="ms-2"></label>
+							<span asp-validation-for="VideoCourseVm.Price" class="text-danger"></span>
+						</div>
+
+						<div class="form-floating py-2 col-10">
+
+							<input asp-for="VideoCourseVm.Duration" class="form-control border-0 shadow" />
+							<label asp-for="VideoCourseVm.Duration" class="ms-2"></label>
+							<span asp-validation-for="VideoCourseVm.Duration" class="text-danger"></span>
+						</div>
+
 					</div>
-
-					<div class="form-floating py-2 col-10">
-						<textarea asp-for="VideoCourseVm.Description" class="form-control border-0 shadow"></textarea>
-						<label asp-for="VideoCourseVm.Description" class="ms-2"></label>
-						
+					<div class="col-2 g-3">
+						<img src="@Model.VideoCourseVm.ThumbnailUrl" width="100%"
+							 style="border-radius:5px; border: 1px black" />
 					</div>
-
-					<div class="form-floating py-2 col-10">
-						<input type="file" name="imgFile" asp-for="VideoCourseVm.ThumbnailUrl" class="form-control border-0 shadow" />
-						<label asp-for="VideoCourseVm.ThumbnailUrl" class="ms-2"></label>
-						<span asp-validation-for="VideoCourseVm.ThumbnailUrl" class="text-danger"></span>
-					</div>
-
-					<div class="form-floating py-2 col-10">
-						<select asp-for="@Model.VideoCourseVm.CategoryId" asp-items="@Model.CategoryList"
-								class="form-select border-0 shadow">
-							<option value="" disabled selected>Select category</option>
-						</select>
-						<label asp-for="@Model.VideoCourseVm.CategoryId"></label>
-						<span asp-validation-for="@Model.VideoCourseVm.CategoryId" class="text-danger"></span>
-					</div>
-
-					<div class="form-floating py-2 col-10">
-						<select asp-for="VideoCourseVm.Level" class="form-select border-0 shadow">
-							<option value="" disabled selected>Select difficulty</option>
-							<option value="Beginner">Beginner</option>
-							<option value="Intermediate">Intermediate</option>
-							<option value="Advanced">Advanced</option>
-						</select>
-						<label asp-for="VideoCourseVm.Level" class="ms-2">Difficulty Level</label>
-					</div>
-
-					<div class="form-floating py-2 col-10">
-
-						<input asp-for="VideoCourseVm.Price" class="form-control border-0 shadow" />
-						<label asp-for="VideoCourseVm.Price" class="ms-2"></label>
-						<span asp-validation-for="VideoCourseVm.Price" class="text-danger"></span>
-					</div>
-
-					<div class="form-floating py-2 col-10">
-
-						<input asp-for="VideoCourseVm.Duration" class="form-control border-0 shadow" />
-						<label asp-for="VideoCourseVm.Duration" class="ms-2"></label>
-						<span asp-validation-for="VideoCourseVm.Duration" class="text-danger"></span>
-					</div>
-
 				</div>
-				<div class="col-2 g-3">
-					<img src="@Model.VideoCourseVm.ThumbnailUrl" width="100%"
-						 style="border-radius:5px; border: 1px black" />
-				</div>
+
 			</div>
-
 		</div>
-	</div>
 
 
-	<div class="container  col-12">
-		<p style="font-size:30px">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Course Content</p>
-		<div class="col-ms-6 m-2 text-end">
-			<button class="btn cat-btn text-decoration-none">Add Chapter</button>
-		</div>
-	</div>
-
-	@for (int i = 0; i < Model.VideoCourseVm.Sections.Count; i++)
-    {
-	<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
-		<div class="col-12">
-			<p class="p-2">Chapter (@i+1)</p>
-		</div>
-		<div class="row g-3">
-
-			<div class="form-floating py-2 col-12">
-					<input asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="form-control border-0 shadow" />
-				<label asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="ms-2"></label>
-					<span asp-validation-for="VideoCourseVm.Sections[@i].SectionTitle" class="text-danger"></span>
+		<div class="container  col-12">
+			<p style="font-size:30px">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Course Content</p>
+			<div class="col-ms-6 m-2 text-end">
+				<button id="addChapterBtn" class="btn cat-btn text-decoration-none">Add Chapter</button>
 			</div>
-			<div id="questions-container">
-				<div class="form-floating py-2 col-12">
+		</div>
 
+		<div id="sectionsContainer">
+			@for (int i = 0; i < Model.VideoCourseVm.Sections.Count; i++)
+			{
+				<div class="container card shadow-sm border-0 p-4 mb-4 section-item" style="border-radius: 14px;">
 					<div class="col-12">
-						<p class="p-2">Lecture</p>
-						<button class="btn cat-btn text-decoration-none">Add Lecture</button>
+						<p class="p-2">Chapter @(i + 1)</p>
 					</div>
-					
-					<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
+
+					<div class="row g-3">
+						<input asp-for="VideoCourseVm.Sections[@i].Id" hidden />
+						<input asp-for="VideoCourseVm.Sections[@i].VideoCourseId" hidden />
+
+						<div class="form-floating py-2 col-12">
+							<input asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="form-control border-0 shadow" />
+							<label asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="ms-2"></label>
+							<span asp-validation-for="VideoCourseVm.Sections[@i].SectionTitle" class="text-danger"></span>
+						</div>
+
+						<div class="col-12">
+							<p class="p-2">Lectures</p>
+							<button type="button" class="btn cat-btn text-decoration-none addLectureBtn"
+									data-section-index="@i">
+								Add Lecture
+							</button>
+						</div>
+
+						<div class="lecture-container">
 							@for (int j = 0; j < Model.VideoCourseVm.Sections[i].Lectures.Count; j++)
-						{
-							<div class="col-12">
-							<p class="p-2">Lecture (@j+1)</p>
+							{
+								<div class="container card shadow-sm border-0 p-4 mb-3 lecture-item" style="border-radius: 14px;">
+									<div class="col-12">
+										<p class="p-2">Lecture @(j + 1)</p>
+									</div>
+
+									<div class="row g-3">
+										<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].Id" hidden />
+										<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].SectionId" hidden />
+
+										<div class="form-floating py-2 col-12">
+											<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle"
+												   class="form-control border-0 shadow" />
+											<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle" class="ms-2"></label>
+											<span asp-validation-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle"
+												  class="text-danger"></span>
+										</div>
+
+										<div class="form-floating py-2 col-12">
+											<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" hidden />
+											<input type="file" name="vidFile" class="form-control border-0 shadow" />
+											<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="ms-2"></label>
+											<span asp-validation-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl"
+												  class="text-danger"></span>
+										</div>
+									</div>
+								</div>
+							}
 						</div>
-						
-							<div class="row g-2">
-
-							<div class="form-floating py-2 col-12">
-								<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle" class="form-control border-0 shadow" />
-										<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle" class="ms-2"></label>
-										<span asp-validation-for="VideoCourseVm.Sections[@i].Lectures[@j].LectureTitle" class="text-danger"></span>
-							</div>
-
-							<div class="form-floating py-2 col-12">
-										<input type="file" name="vidFile" asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="form-control border-0 shadow" />
-										<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="ms-2"></label>
-										<span asp-validation-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="text-danger"></span>
-							</div>
-
-						</div>
-						
-						}	
 					</div>
-					
 				</div>
+			}
+		</div>
+
+
+
+		<!-- Additional info + submit buttons (same as before) -->
+		<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
+			<div class="col-12">
+				<p class="p-2">Additional Information</p>
+				@* <div class="form-floating py-2"> *@
+
+				@* 	<input asp-for="VideoCourseVm.Price" class="form-control border-0 shadow" /> *@
+				@* 	<label asp-for="VideoCourseVm.Price" class="ms-2"></label> *@
+				@* 	<span asp-validation-for="VideoCourseVm.Price" class="text-danger"></span> *@
+				@* </div> *@
 			</div>
 		</div>
 
+		<div class="col-ms-12 m-2 text-end">
+			<a asp-controller="Course" asp-action="Index" class="btn cat-btn text-decoration-none">Cancel</a>
+			<button type="submit" class="btn  btn-dark text-decoration-none">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") </button>
+		</div>
+	</form>
+
+	<!-- Hidden templates for cloning -->
+	<div id="chapterTemplate" style="display:none;">
+		<div class="container card shadow-sm border-0 p-4 mb-4 section-item" style="border-radius: 14px;">
+			<div class="row">
+				<div class="col-11"><p class="p-2 chapter-title">Chapter</p></div>
+				<div class="col-1">
+					<button type="button" class="btn btn-link text-danger p-0 ms-auto remove-chapter">
+						<i class="bi bi-trash"></i>
+					</button>
+				</div>
+
+			</div>
+
+			<div class="row g-3">
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Id" />
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].VideoCourseId" />
+
+				<div class="form-floating py-2 col-12">
+					<input name="VideoCourseVm.Sections[INDEX].SectionTitle" class="form-control border-0 shadow" />
+					<label>Section Title</label>
+				</div>
+
+				<div class="col-12">
+					<p class="p-2">Lectures</p>
+					<button type="button" class="btn cat-btn text-decoration-none addLectureBtn">
+						Add Lecture
+					</button>
+				</div>
+
+				<div class="lecture-container"></div>
+			</div>
+		</div>
 	</div>
-	}
-	<div class="col-ms-12 m-2 text-end">
-		<a asp-controller="Course" asp-action="Index" class="btn cat-btn text-decoration-none">Cancel</a>
-		<button type="submit" class="btn cat-btn btn-dark text-decoration-none">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") </button>
+
+	<div id="lectureTemplate" style="display:none;">
+		<div class="container card shadow-sm border-0 p-4 mb-3 lecture-item" style="border-radius: 14px;">
+			<div class="row">
+				<div class="col-11"><p class="p-2 lecture-title">Lecture</p></div>
+				<div class="col-1">
+					<button type="button" class="btn btn-link text-danger p-0 ms-auto remove-lecture">
+						<i class="bi bi-trash"></i>
+					</button>
+				</div>
+
+			</div>
+
+			<div class="row g-3">
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].Id" />
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].SectionId" />
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].VideoUrl" value="" />
+
+				<div class="form-floating py-2 col-12">
+					<input name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].LectureTitle"
+						   class="form-control border-0 shadow" />
+					<label>Lecture Title</label>
+				</div>
+
+				<div class="form-floating py-2 col-12">
+					<input type="file" name="vidFile" class="form-control border-0 shadow" />
+					<label>Video URL</label>
+				</div>
+			</div>
+		</div>
 	</div>
-	
-</form>
+</div>
+
+
 
 
 
@@ -170,6 +263,67 @@
 	@{
 		<partial name="_ValidationScriptsPartial" />
 	}
+	<script>
+		let chapterIndex = @Model.VideoCourseVm.Sections.Count;
+
+		document.getElementById("addChapterBtn").addEventListener("click", function (e) {
+			e.preventDefault();
+
+			const template = document.getElementById("chapterTemplate");
+			if (!template) return;
+
+			const clone = template.firstElementChild.cloneNode(true);
+			clone.innerHTML = clone.innerHTML.replaceAll("INDEX", chapterIndex);
+
+			clone.querySelector(".chapter-title").innerText = "Chapter " + (chapterIndex + 1);
+
+			clone.querySelector(".addLectureBtn").addEventListener("click", function (evt) {
+				evt.preventDefault();
+				addLecture(clone, chapterIndex);
+			});
+
+			document.getElementById("sectionsContainer").appendChild(clone);
+			chapterIndex++;
+		});
+
+		// Wire existing “Add Lecture” buttons (rendered from model)
+		document.querySelectorAll("#sectionsContainer .addLectureBtn").forEach(btn => {
+			const sectionIdx = parseInt(btn.getAttribute("data-section-index"), 10);
+			btn.addEventListener("click", function (e) {
+				e.preventDefault();
+				addLecture(btn.closest(".section-item"), sectionIdx);
+			});
+		});
+
+		document.querySelectorAll(".lecture-item .remove-lecture").forEach(btn => {
+			btn.addEventListener("click", () => btn.closest(".lecture-item").remove());
+		});
+
+		document.querySelectorAll(".section-item .remove-chapter").forEach(btn => {
+			btn.addEventListener("click", () => btn.closest(".section-item").remove());
+		});
+
+				function addLecture(chapterDiv, chapIdx) {
+			const container = chapterDiv.querySelector(".lecture-container");
+			const template = document.getElementById("lectureTemplate");
+			if (!container || !template) return;
+
+			const lectureIndex = container.querySelectorAll(".lecture-item").length;
+			const clone = template.firstElementChild.cloneNode(true);
+
+			clone.innerHTML = clone.innerHTML
+				.replaceAll("INDEX", chapIdx)
+				.replaceAll("LECTURE_INDEX", lectureIndex);
+
+			clone.querySelector(".lecture-title").innerText = "Lecture " + (lectureIndex + 1);
+			clone.querySelector(".remove-lecture").addEventListener("click", () => clone.remove());
+
+			container.appendChild(clone);
+		}
+
+
+	</script>
+
 }
 
 

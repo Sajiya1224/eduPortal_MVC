@@ -229,6 +229,30 @@ namespace eduPortal.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("eduPortal.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("VCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("VCourseId");
+
+                    b.ToTable("Cart");
+                });
+
             modelBuilder.Entity("eduPortal.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -253,19 +277,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1067),
+                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9530),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1070),
+                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9536),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 11, 24, 8, 57, 42, 744, DateTimeKind.Utc).AddTicks(1071),
+                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9537),
                             Name = "Networking"
                         });
                 });
@@ -277,6 +301,9 @@ namespace eduPortal.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -308,6 +335,8 @@ namespace eduPortal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("courses");
@@ -315,38 +344,6 @@ namespace eduPortal.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("Course");
 
                     b.UseTphMappingStrategy();
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 4,
-                            Description = "A beginner-friendly course covering the basics of C# programming, syntax, and simple projects.",
-                            Duration = "8h 30m",
-                            IsPublished = false,
-                            Level = "Beginner",
-                            Title = "Introduction to Programming with C#"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 4,
-                            Description = "Learn how to build modern web applications using ASP.NET Core MVC, Razor Pages, and Entity Framework.",
-                            Duration = "12h 15m",
-                            IsPublished = true,
-                            Level = "Intermediate",
-                            Title = "ASP.NET Core MVC for Web Development"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 4,
-                            Description = "Master advanced SQL queries, stored procedures, and database optimization techniques using Microsoft SQL Server.",
-                            Duration = "10h 45m",
-                            IsPublished = false,
-                            Level = "Advanced",
-                            Title = "Advanced Database Management with SQL Server"
-                        });
                 });
 
             modelBuilder.Entity("eduPortal.Models.Lecture", b =>
@@ -466,6 +463,10 @@ namespace eduPortal.DataAccess.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
@@ -490,7 +491,9 @@ namespace eduPortal.DataAccess.Migrations
                     b.HasBaseType("eduPortal.Models.Course");
 
                     b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -552,13 +555,38 @@ namespace eduPortal.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("eduPortal.Models.Cart", b =>
+                {
+                    b.HasOne("eduPortal.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eduPortal.Models.VideoCourse", "VCourse")
+                        .WithMany()
+                        .HasForeignKey("VCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUsers");
+
+                    b.Navigation("VCourse");
+                });
+
             modelBuilder.Entity("eduPortal.Models.Course", b =>
                 {
+                    b.HasOne("eduPortal.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("eduPortal.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Category");
                 });

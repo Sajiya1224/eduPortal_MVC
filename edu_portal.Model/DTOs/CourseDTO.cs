@@ -18,6 +18,7 @@ namespace eduPortal.Models.DTOs
         public double Price { get; set; }
         [Required(ErrorMessage = "Category is required")]
         public int CategoryId { get; set; }
+        public string? ApplicationUserId { get; set; }
         public string? ThumbnailUrl { get; set; }
         public List<SectionDTO> Sections { get; set; } = new();
     }
@@ -25,6 +26,7 @@ namespace eduPortal.Models.DTOs
     public class SectionDTO
     {
         public int Id { get; set; }
+        public int VideoCourseId { get; set; }
         public string SectionTitle { get; set; }
         public List<LectureDTO> Lectures { get; set; } = new();
     }
@@ -32,7 +34,14 @@ namespace eduPortal.Models.DTOs
     public class LectureDTO
     {
         public int Id { get; set; }
+        public int SectionId { get; set; }
         public string LectureTitle { get; set; }
         public string? VideoUrl { get; set; }
+    }
+
+    public class ApplicationUserDTO
+    {
+        public int Id { get; set; }
+        public string Role {  get; set; }
     }
 }

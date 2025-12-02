@@ -119,7 +119,7 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             
             public IFormFile CV { get; set; }
             public IFormFile DemoVid { get; set; }
-            public string? Role { get; set; }
+            public string Role { get; set; }
             
             [ValidateNever]
 

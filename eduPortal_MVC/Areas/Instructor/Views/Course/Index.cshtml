@@ -20,13 +20,14 @@
 
 
     <div class="card-body p-3">
-        <table  class="table table-bordered table-striped display" style="width:100%">
+        <table id="tblData" class="table table-bordered table-striped display" style="width:100%">
             <thead>
                 <tr>
                     <th>Title</th>
                     <th>Duration</th>
                     <th>Level</th>
                     <th>IsPublished</th>
+                    <th>InstructorId</th>
                     <th></th>
                 </tr>             
             </thead>
@@ -38,6 +39,7 @@
                         <td>@obj.Duration</td>
                         <td>@obj.Level</td>
                         <td>@obj.IsPublished</td>
+                        <td>@obj.ApplicationUserId</td>
                         <td>
                             <a asp-controller="Course" asp-action="UpsertVideo" asp-route-id="@obj.Id" class="btn btn-secondary">
                                 <i class="bi bi-pencil-square"></i> Edit
@@ -55,9 +57,9 @@
 </div>
 
 
-@* @section Scripts { *@
-@*     <script src="~/js/course.js"></script> *@
-@* } *@
+ @section Scripts {
+     <script src="~/js/course.js"></script> 
+ } 
 
 
 

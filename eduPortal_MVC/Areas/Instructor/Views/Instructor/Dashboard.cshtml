@@ -1,5 +1,11 @@
-﻿@{
+﻿@model InstructorDashboardVM
+
+
+
+@{
     ViewData["Title"] = "Instructor Dashboard";
+
+    
 }
 <div class="container ">
     <div class="row">
@@ -11,54 +17,59 @@
                 <div class="col-md-3">
                     <div class="card p-3 shadow-sm">
                         <h6>Total Students</h6>
-                        <h3>20,777</h3>
-                        <small class="text-success">+1,234 this month</small>
+                        <h3>@Model.Users.Count(u => u.Role== SD.Role_Learner)</h3>
+                        @* <small class="text-success">+1,234 this month</small> *@
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-3 shadow-sm">
                         <h6>Total Revenue</h6>
                         <h3>$225K</h3>
-                        <small class="text-success">+15K this month</small>
+                        @* <small class="text-success">+15K this month</small> *@
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-3 shadow-sm">
                         <h6>Active Courses</h6>
-                        <h3>8</h3>
-                        <small class="text-muted">2 pending review</small>
+                        <h3>@Model.VideoCourses.Count()</h3>
+                        @* <small class="text-muted">2 pending review</small> *@
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-3 shadow-sm">
                         <h6>Avg. Rating</h6>
                         <h3>4.8 ★</h3>
-                        <small class="text-muted">From 3,456 reviews</small>
+                        @* <small class="text-muted">From 3,456 reviews</small> *@
                     </div>
                 </div>
             </div>
 
             <h4 class="fw-semibold mt-4">My Courses</h4>
-            <div class="card p-3 shadow-sm my-3">
-                <div class="row g-2 align-items-center">
-                    <div class="col-md-2">
-                        <img src="/images/sample-course.jpg" class="img-fluid rounded" />
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Complete Web Development Bootcamp</h5>
-                        <span class="badge bg-success">Published</span>
-                        <div class="mt-2">
-                            <small>Students: 12,543</small><br />
-                            <small>Rating: ⭐ 4.8</small><br />
-                            <small>Revenue: $1124K</small>
+            @foreach (var obj in Model.VideoCourses.Take(4))
+            {
+                <div class="card p-3 shadow-sm my-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-2">
+                            <img src="@obj.ThumbnailUrl" class="img-fluid rounded" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>@obj.Title</h5>
+                            <span class="badge bg-success">@(obj.IsPublished == true ? "Published" : "Not Published")</span>
+                            <div class="mt-2">
+                                @* <small>Students: 12,543</small><br /> *@
+                                @* <small>Rating: ⭐ 4.8</small><br /> *@
+                                @* <small>Revenue: $1124K</small> *@
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a class="btn btn-outline-dark">View</a>
+                            <a class="btn btn-dark">Edit</a>
                         </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <a class="btn btn-outline-dark">View</a>
-                        <a class="btn btn-dark">Edit</a>
-                    </div>
                 </div>
-            </div>
+            }
+
 
             <h4 class="fw-semibold mt-5">Recent Enrollments</h4>
             <table class="table table-striped mt-3 shadow-sm">

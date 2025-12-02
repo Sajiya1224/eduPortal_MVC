@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\eduPortal.DataAccess.csproj" />
-    <ProjectReference Include="..\eduPortal.Utility\eduPortal.Utility.csproj" />
+        <ProjectReference Include="..\eduPortal.Utility\eduPortal.Utility.csproj" />
     <ProjectReference Include="..\edu_portal.Model\eduPortal.Models.csproj" />
   </ItemGroup>
 

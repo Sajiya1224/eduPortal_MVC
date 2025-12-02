@@ -44,7 +44,7 @@ namespace eduPortal.DataAccess.Repository
                     query = query.Include(property.Trim());
                 }
             }
-            return query.FirstOrDefault(filter);
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<T> GetAll(string? includeproperties = null)
@@ -55,7 +55,7 @@ namespace eduPortal.DataAccess.Repository
             {
                 foreach (var property in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(property);
+                    query = query.Include(property.Trim());
                 }
             }
             return query.ToList();

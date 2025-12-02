@@ -16,8 +16,11 @@ namespace eduPortal.DataAccess.Repository
         private readonly ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
         public ICourseRepository Course { get; private set; }
+        public IVideoCourseRepository VideoCourse { get; private set; }
         public ISectionReposirory Section { get; private set; }
         public ILectureRepository Lecture { get; private set; }
+        public ICartRepository Cart { get; private set; }
+        public IApplicationUserRepository ApplicationUser { get; private set; }
         public UnitOfWork(ApplicationDbContext db) 
         {
 
@@ -26,6 +29,8 @@ namespace eduPortal.DataAccess.Repository
             Course = new CourseRepository(_db);
             Section = new SectionRepository(_db);
             Lecture = new LectureRepository(_db);
+            Cart = new CartRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
 
         }
         public void Save()

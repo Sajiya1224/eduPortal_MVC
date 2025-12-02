@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using eduPortal.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using eduPortal.DataAccess.Services.IServices;
+using eduPortal.DataAccess.Services;
+using eduPortal.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options=>
 
 builder.Services.AddRazorPages();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -26,6 +32,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
+builder.Services.AddScoped<IVideoCourseService, VideoCourseService>(); 
 builder.Services.AddScoped<IEmailSender, EmailSender>(); 
 
 var app = builder.Build();

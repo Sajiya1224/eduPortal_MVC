@@ -10,7 +10,7 @@ namespace eduPortal.Models
 {
     public class VideoCourse: Course
     {
-        [Required]
+       
         public string? ThumbnailUrl { get; set; }
 
         [Required]

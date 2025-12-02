@@ -10,8 +10,10 @@ namespace eduPortal.Models
 {
     public  class ApplicationUser: IdentityUser
     {
+        
         [Required]
         public string Name { get; set; }
+        public string Role { get; set; }
         public string Gender { get; set; }
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }

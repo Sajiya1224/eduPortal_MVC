@@ -1,11 +1,11 @@
-﻿@model List<Category>
+﻿@model BrowseCourseVM
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <!-- Hero Section -->
 <div class="mt-0 hero-section d-flex align-items-center justify-content-between flex-column flex-md-row w-100 py-5"
-     style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
+style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
 
     <!-- Left Content -->
     <div class="container-fluid px-5 px-md-5">
@@ -38,16 +38,16 @@
 <div class="p-5 mt-3 mb-3">
     <form class="d-flex mx-auto custom-search">
         <input class="form-control rounded-pill search-input border-2"
-               type="search"
-               placeholder="Search courses..."
-               aria-label="Search">
+        type="search"
+        placeholder="Search courses..."
+        aria-label="Search">
     </form>
 </div>
 
-    @* <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;"> *@
-    @*     <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses"> *@
-    @*     <button class="btn btn-secondary" type="button">Search</button> *@
-    @* </div> *@
+@* <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;"> *@
+@*     <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses"> *@
+@*     <button class="btn btn-secondary" type="button">Search</button> *@
+@* </div> *@
 
 
 
@@ -59,21 +59,22 @@
         <h5 class="mb-5 text-center text-muted">Explore our most popular course categories</h5>
 
         <div class="row g-4">
-            @foreach (var obj in Model.Take(4))
+            @foreach (var obj in Model.CategoryList.Take(4))
             {
-                <div class="col-md-3">
+                <div class="col-md-3 text-decoration-none">
                     <div class="card shadow-sm h-100 rounded-full">
                         <div class="card-body p-4 text-center">
-                            <h5 class="card-title">@obj.Name</h5>
+                        <a asp-controller="Home" asp-action="BrowseCourse" class="card-title text-muted">@obj.Name</a>
                         </div>
                     </div>
                 </div>
             }
 
         </div>
-        <div class="text-center m-4">
+        <div class="mt-5 text-center text-muted">
             <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-outline-secondary btn-lg px-4 py-2">More</a>
-        </div>
+       </div>
+           
     </div>
 </div>
 
@@ -84,16 +85,49 @@
     <div class="container my-5">
         <h2 class="mb-3 text-center">Featured Courses</h2>
         <h5 class="mb-5 text-center text-muted">Hand-picked courses to help you get started</h5>
-        <div class="row g-4">
 
+        <div class="text-center mt-4">
+            <div class="row g-4">
+                @foreach (var course in Model.videoCourse.Take(4))
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId="@course.Id" 
+                        class="card shadow-sm border-0 h-100 text-decoration-none">
 
-        </div>
-        <div class="text-center m-4">
-            <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-outline-secondary btn-lg px-4 py-2">View all</a>
+                            <!-- Course Image -->
+                            <img src="@course.ThumbnailUrl" class="card-img-top"
+                                 style="height: 180px; object-fit: cover;" />
+
+                            <div class="card-body">
+
+                                <!-- Title -->
+                                <h5 class="card-title fw-semibold">
+                                    @course.Title
+                                </h5>
+
+                                <!-- Instructor Name -->
+                                <p class="text-muted mb-1">
+                                    @* @course.InstructorName *@
+                                </p>
+
+                                <!-- Rating -->
+                                <div class="d-flex align-items-center mb-2">
+                                    @* <span class="text-warning me-1">★</span> *@
+                                    @* <span class="fw-bold">@course.Rating</span> *@
+                                    @* <span class="text-muted ms-1">(@course.RatingCount)</span> *@
+                                </div>
+
+                                <!-- Price -->
+                                <h5 class="fw-bold">$@course.Price</h5>
+
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
-
 
 <!-- Become an Instructor -->
 

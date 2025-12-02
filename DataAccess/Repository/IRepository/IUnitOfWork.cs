@@ -11,8 +11,11 @@ namespace eduPortal.DataAccess.Repository.IRepository
     {
         ICategoryRepository Category { get; }
         ICourseRepository Course { get; }
+        IVideoCourseRepository VideoCourse { get; }
         ISectionReposirory Section { get; }
         ILectureRepository Lecture { get; }
+        ICartRepository Cart { get; }
+        IApplicationUserRepository ApplicationUser { get; }
         void Save();
     }
 }

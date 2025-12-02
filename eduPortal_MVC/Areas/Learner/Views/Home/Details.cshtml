@@ -1,0 +1,87 @@
+﻿@model Cart
+
+<form method="post">
+    <div class="container py-4">
+
+        <!-- TITLE + LEFT SIDEBAR -->
+
+        <div class="row">
+            <!-- LEFT CONTENT -->
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold mt-2">
+                    @Model.VCourse.Title
+                </h2>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="badge bg-success">Bestseller</span>
+                    <span class="fw-bold text-warning">Ratings here</span>
+                    <span>total no of rating in count</span>
+                    <span>Total no of learner enrolled in this course</span>
+                </div>
+
+                <!-- Instructor & Update info -->
+                <p class="text-muted">
+                    Created by @(Model.VCourse.ApplicationUser?.Name ?? "Unknown instructor")<br />
+                    @(Model.VCourse.Language ?? "Language Not Defined") • @((int?)ViewBag.InstructorCourseCount ?? 0) total courses
+                </p>
+
+                <hr />
+
+                <!-- WHAT YOU'LL LEARN -->
+                <h4 class="mt-4">What you'll learn</h4>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        what you will learn from this video present in additional info in li
+                    </div>
+                    <div class="col-md-6">
+                        what you will learn from this video present in additional info in li
+                    </div>
+                </div>
+
+                <hr />
+
+                <!-- COURSE CONTENT -->
+                <h4>Course content</h4>
+                <p>
+                    @Model.VCourse.Sections.Count() Section •  
+                    @(Model.VCourse.Sections?.Sum(s => s.Lectures != null ? s.Lectures.Count : 0) ?? 0) Lectures • 
+                    @Model.VCourse.Duration
+                </p>
+
+                <!-- SECTION (reusable pattern) -->
+                <div class="accordion" id="courseAccordion">
+                    course
+                    |- Section
+                    |- Lecture
+                    <!-- Add more sections exactly like Udemy -->
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDEBAR CARD -->
+            <div class="col-lg-4">
+                <div class="card shadow sticky-top" style="top: 100px;">
+
+                    <img src="@Model.VCourse.ThumbnailUrl" class="card-img-top" alt="Preview">
+
+                    <div class="card-body">
+
+                        <h3 class="fw-bold">discounted price here <small class="text-muted text-decoration-line-through">@Model.VCourse.Price</small></h3>
+
+                        <button type="submit" class="btn btn-primary w-100 mb-2">Add to cart</button>
+                        <a asp-controller="" asp-action="" class="btn btn-outline-primary w-100 mb-3">Enroll Now</a>
+
+                        <p class="text-muted small text-center">
+                            Full Lifetime Access
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+

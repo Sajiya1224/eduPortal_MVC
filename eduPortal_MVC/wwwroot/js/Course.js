@@ -9,16 +9,16 @@ function LoadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": { url: '/instructor/course/getall' },
         "columns": [
-            { data: 'Title', width: "14%" },
-            { data: 'Price', width: "14%" },
-            { data: 'Duration', width: "14%" },
-            { data: 'Level', width: "14%" },
-            { data: 'IsPublished', width: "14%" },
+            { data: 'title', width: "15%" },
+            { data: 'duration', width: "15%" },
+            { data: 'level', width: "10%" },
+            { data: 'isPublished', width: "10%" },
+            { data: 'applicationUserId', width: "10%" },
             {
                 data: 'id',
                 render: function (data) {
                     return `<div class="w-75 btn-group" role="group">
-                                <a href="/instructor/course/edit/${data}" class="btn btn-secondary mx-2">
+                                <a href="/instructor/course/upsertVideo/${data}" class="btn btn-secondary mx-2">
                                     <i class="bi bi-pencil-square"> Edit</i>
                                 </a>
                                 <a  OnClick="Delete('/instructor/course/delete/${data}')" class="btn btn-danger mx-2">
@@ -26,7 +26,7 @@ function LoadDataTable() {
                                 </a>
                             </div>`;
                 },
-                width: "14%"
+                width: "40%"
             }
         ]
     });

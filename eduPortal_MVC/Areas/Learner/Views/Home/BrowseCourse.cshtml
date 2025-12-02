@@ -1,4 +1,10 @@
-﻿@model List<Category>
+﻿
+@model BrowseCourseVM
+
+@* @{ *@
+@*     ViewData["Title"] = "Courses"; *@
+@*     var total = Model?.Count() ?? 0; *@
+@* } *@
 
 
 <div class="container my-4">
@@ -7,12 +13,61 @@
     <h5 class="mb-3" style="color: rgba(200,200,200,1)">Discover your next learning adventure from our collection</h5>
 
     <div class="category-scroll d-flex gap-3 mb-4">
-        <button class="cat-btn active">All Courses</button>
-        @foreach (var obj in Model)
+        <button class="cat-btn ">All Courses</button>
+        @foreach (var obj in Model.CategoryList)
         {
             <button class="cat-btn">@obj.Name</button>
         }
     </div>
+
+ 
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5 class="text-muted">Showing @Model.videoCourse.Count() courses</h5>
+        </div>
+    </div>
+
+    <div class="row g-4">
+            @foreach (var course in Model.videoCourse)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId ="@course.Id" class="card shadow-sm border-0 h-100">
+
+                    <!-- Course Image -->
+                    <img src="@course.ThumbnailUrl" class="card-img-top" 
+                         style="height: 180px; object-fit: cover;" />
+
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h5 class="card-title fw-semibold">
+                            @course.Title
+                        </h5>
+
+                        <!-- Instructor Name -->
+                        <p class="text-muted mb-1">
+                            @* @course.InstructorName *@
+                        </p>
+
+                        <!-- Rating -->
+                        <div class="d-flex align-items-center mb-2">
+                            @* <span class="text-warning me-1">★</span> *@
+                            @* <span class="fw-bold">@course.Rating</span> *@
+                            @* <span class="text-muted ms-1">(@course.RatingCount)</span> *@
+                        </div>
+
+                        <!-- Price -->
+                        <h5 class="fw-bold">$@course.Price</h5>
+
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
 
 </div>
 

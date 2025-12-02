@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace eduPortal.DataAccess.Repository.IRepository
 {
-    public interface ICourseRepository: IRepository<Course>
+    public interface ICourseRepository : IRepository<Course>
+
     {
         void Update(Course obj);
     }
