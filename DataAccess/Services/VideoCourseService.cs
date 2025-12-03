@@ -6,6 +6,7 @@ using eduPortal.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using static System.Collections.Specialized.BitVector32;
 using Section = eduPortal.Models.Section;
 
 
@@ -23,11 +24,15 @@ namespace eduPortal.DataAccess.Services
 
         }
 
-        public VideoCourse saveCourse(VideoCourseVM obj, IFormFile? imgFile, IList<IFormFile> vidFile)
+        public VideoCourse saveCourse(VideoCourseVM obj, IFormFile? imgFile, IList<IFormFile> vidFiles)
         {
             obj.VideoCourseVm.ThumbnailUrl = SaveCourseThumbnail(imgFile, obj.VideoCourseVm.ThumbnailUrl);
             var course = UpsertCourse(obj);
-            HandelingSection(obj.VideoCourseVm.Sections, course.Id, vidFile);
+
+            HandelingSection(obj.VideoCourseVm.Sections, course,  vidFiles);
+
+
+
             return course;
         }
 
@@ -44,9 +49,9 @@ namespace eduPortal.DataAccess.Services
                 {
                     var oldImgPath = Path.Combine(wwwRootPath, (objFile.TrimStart('\\')));
 
-                    if (File.Exists(oldImgPath))
+                    if (System.IO.File.Exists(oldImgPath))
                     {
-                        File.Delete(oldImgPath);
+                        System.IO.File.Delete(oldImgPath);
                     }
 
                 }
@@ -64,122 +69,137 @@ namespace eduPortal.DataAccess.Services
 
         private VideoCourse UpsertCourse(VideoCourseVM obj)
         {
-            //Map DTO to entity 
-            var course = new VideoCourse
-            {
-                Id = obj.VideoCourseVm.Id,
-                Title = obj.VideoCourseVm.Title,
-                Description = obj.VideoCourseVm.Description,
-                Price = obj.VideoCourseVm.Price,
-                Level = obj.VideoCourseVm.Level,
-                Duration = obj.VideoCourseVm.Duration,
-                CategoryId = obj.VideoCourseVm.CategoryId,
-                ApplicationUserId = obj.VideoCourseVm.ApplicationUserId,
-                ThumbnailUrl = obj.VideoCourseVm.ThumbnailUrl
-            };
+            VideoCourse course;
 
-            if (course.Id == 0)
+            if (obj.VideoCourseVm.Id == 0 || obj.VideoCourseVm.Id == null)
             {
-                _unitOfWork.Course.Add(course);
+                // CREATE as id = 0 mean doesn't exist
+                course = new VideoCourse
+                {
+                    Title = obj.VideoCourseVm.Title,
+                    Description = obj.VideoCourseVm.Description,
+                    Price = obj.VideoCourseVm.Price,
+                    Level = obj.VideoCourseVm.Level,
+                    Duration = obj.VideoCourseVm.Duration,
+                    CategoryId = obj.VideoCourseVm.CategoryId,
+                    ApplicationUserId = obj.VideoCourseVm.ApplicationUserId,
+                    ThumbnailUrl = obj.VideoCourseVm.ThumbnailUrl,
+                    
+                };
+               _unitOfWork.Course.Add(course);
             }
             else
             {
+                // UPDATE – load from DB to keep children
+                course = (VideoCourse)_unitOfWork.Course.Get(
+                    c => c.Id == obj.VideoCourseVm.Id,
+                    includeproperties: "Category, ApplicationUser, Sections, Sections.Lectures"
+                );
+                // Update fields
+                //course.Id = (int)obj.VideoCourseVm.Id;
+                course.Title = obj.VideoCourseVm.Title;
+                course.Description = obj.VideoCourseVm.Description;
+                course.Price = obj.VideoCourseVm.Price;
+                course.Level = obj.VideoCourseVm.Level;
+                course.Duration = obj.VideoCourseVm.Duration;
+                course.CategoryId = obj.VideoCourseVm.CategoryId;
+                course.ApplicationUserId = obj.VideoCourseVm.ApplicationUserId;
+                course.ThumbnailUrl = obj.VideoCourseVm.ThumbnailUrl;
                 _unitOfWork.Course.Update(course);
             }
-            // Save course
-
+            course.Sections ??= new List<Section>();
             _unitOfWork.Save();
             return course;
         }
-        private void HandelingSection(List<SectionDTO> Sections, int courseId, IList<IFormFile> vidFile)
+      
+        private void HandelingSection(List<SectionDTO> sectionDtos, VideoCourse course, IList<IFormFile> vidFiles)
         {
-            foreach (var sec in Sections)
+            // 1. Delete removed sections
+            var existingSections = sectionDtos.Select(s => s.Id).ToList();
+            var removedSections = course.Sections.Where(s => !existingSections.Contains(s.Id)).ToList();
+
+            foreach (var sec in removedSections)
+                _unitOfWork.Section.Remove(sec);
+
+
+            foreach (var dto in sectionDtos)
             {
                 Section section;
-
-                if (sec.Id == 0)
+              
+                if (dto.Id == 0 || dto.Id == null)
                 {
                     // NEW SECTION
                     section = new Section
                     {
-                        SectionTitle = sec.SectionTitle,
-                        VideoCourseId = courseId
+                       
+                        SectionTitle = dto.SectionTitle,
+                        VideoCourseId = course.Id
                     };
-
                     _unitOfWork.Section.Add(section);
-                    _unitOfWork.Save(); // save first to generate DB Id
-
-                    // Pass the correct DB-generated Id to lectures 
-                    HandelingLecture(sec.Lectures, section.Id, vidFile);
                 }
                 else
                 {
-                    // EXISTING SECTION
-                    section = _unitOfWork.Section.Get(s => s.Id == sec.Id);
+                    section = course.Sections.FirstOrDefault(s => s.Id == dto.Id);
                     if (section == null)
-                        continue;
-
-                    section.SectionTitle = sec.SectionTitle;
+                    {
+                        section = new Section { VideoCourseId = course.Id, SectionTitle = dto.SectionTitle };
+                        _unitOfWork.Section.Add(section);
+                    }
+                    section.VideoCourseId = course.Id;
+                    section.SectionTitle = dto.SectionTitle;
                     _unitOfWork.Section.Update(section);
-                    _unitOfWork.Save();
-
-                    HandelingLecture(sec.Lectures, section.Id, vidFile);
                 }
+                _unitOfWork.Save();
+                HandelingLecture(section, dto.Lectures, vidFiles);
             }
         }
 
 
-        private void HandelingLecture(List<LectureDTO> Lectures, int secId, IList<IFormFile> vidFile)
+        private void HandelingLecture(Section section, List<LectureDTO> lectureDtos, IList<IFormFile> vidFiles)
         {
-            int index = 0;
-           
+            // delete removed lectures
+            var incomingIds = lectureDtos.Select(l => l.Id).ToList();
+            var removedLectures = section.Lectures.Where(l => !incomingIds.Contains(l.Id)).ToList();
 
-            foreach (var lec in Lectures)
+            foreach (var lec in removedLectures)
+                _unitOfWork.Lecture.Remove(lec);
+
+            int fileIndex = 0;
+
+            foreach (var dto in lectureDtos)
             {
-                string vidUrl = lec.VideoUrl;
-                //var vidUrl = saveVideo(vidFile, lec.VideoUrl);
-                if (index < vidFile.Count && vidFile[index] != null)
-                     vidUrl = saveVideo(vidFile[index], lec.VideoUrl);
-
                 Lecture lecture;
-                if (lec.Id == 0)
+
+                // Select the video file only if uploaded
+                IFormFile? file = fileIndex < vidFiles.Count ? vidFiles[fileIndex] : null;
+
+                string newUrl = file != null? saveVideo(file, dto.VideoUrl): dto.VideoUrl; // keep old value
+
+                if (dto.Id == 0 || dto.Id == null)
                 {
-                    if (string.IsNullOrEmpty(vidUrl))
-                    {
-                        continue; 
-                    }
-                    // NEW LECTURE
+                    // NEW
                     lecture = new Lecture
                     {
-                        Id = lec.Id,
-                        LectureTitle = lec.LectureTitle,
-                        VideoUrl = vidUrl,
-                        SectionId = secId
+                        LectureTitle = dto.LectureTitle,
+                        VideoUrl = newUrl,
+                        SectionId = section.Id
                     };
-
                     _unitOfWork.Lecture.Add(lecture);
-
                 }
                 else
                 {
-                    // EXISTING LECTURE
-                    lecture = _unitOfWork.Lecture.Get(l => l.Id == lec.Id);
-
-                    if (lecture == null)
-                        continue;
-
-                    lecture.LectureTitle = lec.LectureTitle;
-                    lecture.VideoUrl = vidUrl;
-
+                    // UPDATE
+                    lecture = section.Lectures.First(l => l.Id == dto.Id);
+                    lecture.LectureTitle = dto.LectureTitle;
+                    lecture.VideoUrl = newUrl;
                     _unitOfWork.Lecture.Update(lecture);
                 }
                 _unitOfWork.Save();
-                index++;
+                fileIndex++;
             }
-           
+
         }
         
-
         private string saveVideo(IFormFile? vidFile, string objVid)
         {
             string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -193,9 +213,9 @@ namespace eduPortal.DataAccess.Services
                 {
                     var oldVidPath = Path.Combine(wwwRootPath, (objVid.TrimStart('\\')));
 
-                    if (File.Exists(oldVidPath))
+                    if (System.IO.File.Exists(oldVidPath))
                     {
-                        File.Delete(oldVidPath);
+                        System.IO.File.Delete(oldVidPath);
                     }
 
                 }

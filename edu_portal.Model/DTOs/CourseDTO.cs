@@ -10,7 +10,7 @@ namespace eduPortal.Models.DTOs
 {
     public class VideoCourseDTO
     {
-        public int Id {  get; set; }
+        public int? Id {  get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Duration { get; set; }
@@ -25,16 +25,16 @@ namespace eduPortal.Models.DTOs
 
     public class SectionDTO
     {
-        public int Id { get; set; }
-        public int VideoCourseId { get; set; }
+        public int? Id { get; set; }
+        public int? VideoCourseId { get; set; }
         public string SectionTitle { get; set; }
         public List<LectureDTO> Lectures { get; set; } = new();
     }
 
     public class LectureDTO
     {
-        public int Id { get; set; }
-        public int SectionId { get; set; }
+        public int? Id { get; set; }
+        public int? SectionId { get; set; }
         public string LectureTitle { get; set; }
         public string? VideoUrl { get; set; }
     }

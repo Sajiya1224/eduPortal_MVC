@@ -16,8 +16,8 @@
 
 
 		<div class="container col-12">
-			<h2 class="py-2">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Video Course</h2>
-			<p class="text-muted">@(Model.VideoCourseVm.Id != 0 ? "Edit and Update your courses easily" : "Build a comprehensive video-based learning experience")</p>
+			<h2 class="py-2">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create") Video Course</h2>
+			<p class="text-muted">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Edit and Update your courses easily" : "Build a comprehensive video-based learning experience")</p>
 		</div>
 
 		<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
@@ -89,7 +89,7 @@
 
 
 		<div class="container  col-12">
-			<p style="font-size:30px">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") Course Content</p>
+			<p style="font-size:30px">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create") Course Content</p>
 			<div class="col-ms-6 m-2 text-end">
 				<button id="addChapterBtn" class="btn cat-btn text-decoration-none">Add Chapter</button>
 			</div>
@@ -105,7 +105,7 @@
 
 					<div class="row g-3">
 						<input asp-for="VideoCourseVm.Sections[@i].Id" hidden />
-						<input asp-for="VideoCourseVm.Sections[@i].VideoCourseId" hidden />
+						@* <input asp-for="VideoCourseVm.Sections[@i].VideoCourseId" hidden /> *@
 
 						<div class="form-floating py-2 col-12">
 							<input asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="form-control border-0 shadow" />
@@ -174,7 +174,7 @@
 
 		<div class="col-ms-12 m-2 text-end">
 			<a asp-controller="Course" asp-action="Index" class="btn cat-btn text-decoration-none">Cancel</a>
-			<button type="submit" class="btn  btn-dark text-decoration-none">@(Model.VideoCourseVm.Id != 0 ? "Update" : "Create") </button>
+			<button type="submit" class="btn btn-dark text-decoration-none">@(Model.VideoCourseVm.Id == 0 ? "Update" : "Create") </button>
 		</div>
 	</form>
 
@@ -227,7 +227,7 @@
 			<div class="row g-3">
 				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].Id" />
 				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].SectionId" />
-				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].VideoUrl" value="" />
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].VideoUrl"/>
 
 				<div class="form-floating py-2 col-12">
 					<input name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].LectureTitle"
@@ -320,7 +320,23 @@
 
 			container.appendChild(clone);
 		}
+			 document.querySelector('form').addEventListener('submit', function(e) {
+			// Reindex sections and lectures before submitting
+			document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
+				sec.querySelectorAll('input, textarea, select').forEach(input => {
+					input.name = input.name.replace(/Sections\[\d+\]/, `Sections[${i}]`);
+				});
+			});
 
+			// For lectures inside each section
+			document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
+				sec.querySelectorAll('.lecture-container .lecture-item').forEach((lec, j) => {
+					lec.querySelectorAll('input, textarea, select').forEach(input => {
+						input.name = input.name.replace(/Lectures\[\d+\]/, `Lectures[${j}]`);
+					});
+				});
+			});
+		});
 
 	</script>
 

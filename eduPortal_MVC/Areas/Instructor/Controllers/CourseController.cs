@@ -148,6 +148,15 @@ namespace eduPortal.Areas.Instructor.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             obj.VideoCourseVm.ApplicationUserId = userId;
+
+
+            // CLEAN SECTIONS
+            obj.VideoCourseVm.Sections = obj.VideoCourseVm.Sections
+                .Where(s => !string.IsNullOrWhiteSpace(s.SectionTitle))
+                .ToList();
+            ModelState.Clear();
+            TryValidateModel(obj.VideoCourseVm);
+
             if (!ModelState.IsValid)
             {
 
@@ -160,9 +169,17 @@ namespace eduPortal.Areas.Instructor.Controllers
                 return View(obj);
             }
 
+
+
+
             // getting the saving course logic from videoCourseServices 
             var savingCourse = _videoCourseService.saveCourse(obj, imgFile, vidFile);
-         
+
+            //// ASSIGN VIDEOCOURSEID TO EACH SECTION 
+            //foreach (var section in obj.VideoCourseVm.Sections)
+            //{
+            //    section.VideoCourseId = (int)obj.VideoCourseVm.Id;
+            //}
 
             TempData["success"] = savingCourse.Id == 0 ?
             "Course Created Successfully!" :
