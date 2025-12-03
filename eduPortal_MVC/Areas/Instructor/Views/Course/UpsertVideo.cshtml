@@ -1,4 +1,4 @@
-﻿@model VideoCourseVM
+﻿	@model VideoCourseVM
 
 
 
@@ -320,23 +320,23 @@
 
 			container.appendChild(clone);
 		}
-			 document.querySelector('form').addEventListener('submit', function(e) {
-			// Reindex sections and lectures before submitting
-			document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
-				sec.querySelectorAll('input, textarea, select').forEach(input => {
-					input.name = input.name.replace(/Sections\[\d+\]/, `Sections[${i}]`);
-				});
-			});
+			 // document.querySelector('form').addEventListener('submit', function(e) {
+// Reindex sections and lectures before submitting
+			// document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
+			// 	sec.querySelectorAll('input, textarea, select').forEach(input => {
+			// 		input.name = input.name.replace(/Sections\[\d+\]/, `Sections[${i}]`);
+			// 	});
+			// });
 
-			// For lectures inside each section
-			document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
-				sec.querySelectorAll('.lecture-container .lecture-item').forEach((lec, j) => {
-					lec.querySelectorAll('input, textarea, select').forEach(input => {
-						input.name = input.name.replace(/Lectures\[\d+\]/, `Lectures[${j}]`);
-					});
-				});
-			});
-		});
+// For lectures inside each section
+		// 	document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
+		// 		sec.querySelectorAll('.lecture-container .lecture-item').forEach((lec, j) => {
+		// 			lec.querySelectorAll('input, textarea, select').forEach(input => {
+		// 				input.name = input.name.replace(/Lectures\[\d+\]/, `Lectures[${j}]`);
+		// 			});
+		// 		});
+		// 	});
+		// });
 
 	</script>
 

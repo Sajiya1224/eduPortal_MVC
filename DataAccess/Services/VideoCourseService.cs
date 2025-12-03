@@ -15,18 +15,20 @@ namespace eduPortal.DataAccess.Services
     public class VideoCourseService: IVideoCourseService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediaSaveServices _mediaService;
         private readonly IWebHostEnvironment _webHostEnvironment;
       
-        public VideoCourseService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment) 
+        public VideoCourseService(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IMediaSaveServices mediaService) 
         {
             _unitOfWork = unitOfWork;
+            _mediaService = mediaService;
             _webHostEnvironment = webHostEnvironment;
 
         }
 
         public VideoCourse saveCourse(VideoCourseVM obj, IFormFile? imgFile, IList<IFormFile> vidFiles)
         {
-            obj.VideoCourseVm.ThumbnailUrl = SaveCourseThumbnail(imgFile, obj.VideoCourseVm.ThumbnailUrl);
+            obj.VideoCourseVm.ThumbnailUrl = _mediaService.SaveThumbnail(imgFile, obj.VideoCourseVm.ThumbnailUrl);
             var course = UpsertCourse(obj);
 
             HandelingSection(obj.VideoCourseVm.Sections, course,  vidFiles);
@@ -35,37 +37,6 @@ namespace eduPortal.DataAccess.Services
 
             return course;
         }
-
-        private string SaveCourseThumbnail(IFormFile? imgFile, string objFile)
-        {
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            if (imgFile != null)
-            {
-                
-                string imgFileName = Guid.NewGuid().ToString() + Path.GetExtension(imgFile.FileName);
-                string imgPath = Path.Combine(wwwRootPath, @"Courses\Thumbnails");
-
-                if (!string.IsNullOrEmpty(objFile))
-                {
-                    var oldImgPath = Path.Combine(wwwRootPath, (objFile.TrimStart('\\')));
-
-                    if (System.IO.File.Exists(oldImgPath))
-                    {
-                        System.IO.File.Delete(oldImgPath);
-                    }
-
-                }
-
-                using (var imgfileStream = new FileStream(Path.Combine(imgPath, imgFileName), FileMode.Create))
-                {
-                    imgFile.CopyTo(imgfileStream);
-                }
-
-                return $@"\Courses\Thumbnails\{imgFileName}"; 
-            }
-            else return objFile;
-        }
-
 
         private VideoCourse UpsertCourse(VideoCourseVM obj)
         {
@@ -173,7 +144,7 @@ namespace eduPortal.DataAccess.Services
                 // Select the video file only if uploaded
                 IFormFile? file = fileIndex < vidFiles.Count ? vidFiles[fileIndex] : null;
 
-                string newUrl = file != null? saveVideo(file, dto.VideoUrl): dto.VideoUrl; // keep old value
+                string newUrl = file != null? _mediaService.SaveLectureVideo(file, dto.VideoUrl) : dto.VideoUrl; // keep old value
 
                 if (dto.Id == 0 || dto.Id == null)
                 {
@@ -200,37 +171,7 @@ namespace eduPortal.DataAccess.Services
 
         }
         
-        private string saveVideo(IFormFile? vidFile, string objVid)
-        {
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            if (vidFile != null)
-            {
-
-                string vidFileName = Guid.NewGuid().ToString() + Path.GetExtension(vidFile.FileName);
-                string vidPath = Path.Combine(wwwRootPath, @"Courses\Videos");
-
-                if (!string.IsNullOrEmpty(objVid))
-                {
-                    var oldVidPath = Path.Combine(wwwRootPath, (objVid.TrimStart('\\')));
-
-                    if (System.IO.File.Exists(oldVidPath))
-                    {
-                        System.IO.File.Delete(oldVidPath);
-                    }
-
-                }
-
-                using (var vidfileStream = new FileStream(Path.Combine(vidPath, vidFileName), FileMode.Create))
-                {
-                    vidFile.CopyTo(vidfileStream);
-                }
-
-                return $@"\Courses\Videos\{vidFileName}";
-            }
-
-            else return objVid;
-        }
-
+    
 
     }
 

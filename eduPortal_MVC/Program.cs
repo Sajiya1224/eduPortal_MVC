@@ -31,8 +31,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
-builder.Services.AddScoped<IVideoCourseService, VideoCourseService>(); 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IMediaSaveServices, MediaSaveServices>();
+builder.Services.AddScoped<IVideoCourseService, VideoCourseService>();
+
 builder.Services.AddScoped<IEmailSender, EmailSender>(); 
 
 var app = builder.Build();
