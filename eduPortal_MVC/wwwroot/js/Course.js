@@ -21,7 +21,7 @@ function LoadDataTable() {
                                 <a href="/instructor/course/upsertVideo/${data}" class="btn btn-secondary mx-2">
                                     <i class="bi bi-pencil-square"> Edit</i>
                                 </a>
-                                <a  OnClick="Delete('/instructor/course/delete/${data}')" class="btn btn-danger mx-2">
+                                <a  onclick="Delete('/instructor/course/delete/${data}')" class="btn btn-danger mx-2">
                                     <i class="bi bi-trash3-fill"> Delete</i>
                                 </a>
                             </div>`;

@@ -18,29 +18,29 @@ namespace eduPortal.DataAccess.Services
             _env = env;
         }
 
-        public string SaveThumbnail(IFormFile? file, string currentPath)
+        public string SaveThumbnail(IFormFile? imgFile, string currentPath)
         {
-            if (file == null) return currentPath;
+            if (imgFile == null) return currentPath;
             var folder = Path.Combine(_env.WebRootPath, @"Courses\Thumbnails");
             Directory.CreateDirectory(folder);
 
             DeleteIfExists(currentPath);
-            var newName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var newName = $"{Guid.NewGuid()}{Path.GetExtension(imgFile.FileName)}";
             using var fs = new FileStream(Path.Combine(folder, newName), FileMode.Create);
-            file.CopyTo(fs);
+            imgFile.CopyTo(fs);
             return $@"\Courses\Thumbnails\{newName}";
         }
 
-        public string SaveLectureVideo(IFormFile? file, string currentPath)
+        public string SaveLectureVideo(IFormFile? vidFile, string currentPath)
         {
-            if (file == null) return currentPath;
+            if (vidFile == null) return currentPath;
             var folder = Path.Combine(_env.WebRootPath, @"Courses\Videos");
             Directory.CreateDirectory(folder);
 
             DeleteIfExists(currentPath);
-            var newName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var newName = $"{Guid.NewGuid()}{Path.GetExtension(vidFile.FileName)}";
             using var fs = new FileStream(Path.Combine(folder, newName), FileMode.Create);
-            file.CopyTo(fs);
+            vidFile.CopyTo(fs);
             return $@"\Courses\Videos\{newName}";
         }
 

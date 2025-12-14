@@ -33,7 +33,7 @@
             @foreach (var course in Model.videoCourse)
         {
             <div class="col-lg-3 col-md-4 col-sm-6">
-                <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId ="@course.Id" class="card shadow-sm border-0 h-100">
+                <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId ="@course.Id" class="card shadow-sm border-0 h-100 text-decoration-none text-muted">
 
                     <!-- Course Image -->
                     <img src="@course.ThumbnailUrl" class="card-img-top" 
@@ -41,14 +41,20 @@
 
                     <div class="card-body">
 
+                        <!-- Category Name -->
+                        <h5 class="badge bg-success">
+                            @course.Category.Name
+                        </h5>
+
+
                         <!-- Title -->
-                        <h5 class="card-title fw-semibold">
+                            <h5 class="card-title  fw-bold">
                             @course.Title
                         </h5>
 
                         <!-- Instructor Name -->
                         <p class="text-muted mb-1">
-                            @* @course.InstructorName *@
+                                @* Created by @(Model.VCourse.ApplicationUser?.Name ?? "Unknown instructor") *@
                         </p>
 
                         <!-- Rating -->
@@ -59,7 +65,7 @@
                         </div>
 
                         <!-- Price -->
-                        <h5 class="fw-bold">$@course.Price</h5>
+                            <h5 class=" fw-bold text-end">$@course.Price</h5>
 
                     </div>
                 </a>

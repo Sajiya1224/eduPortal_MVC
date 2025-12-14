@@ -124,6 +124,7 @@ namespace eduPortal.Areas.Instructor.Controllers
                     CategoryId = courseEntity.CategoryId,
                     Price = courseEntity.Price,
                     ThumbnailUrl = courseEntity.ThumbnailUrl,
+                    AddInfo = courseEntity.AddInfo,
                     Sections = courseEntity.Sections.Select(sec => new SectionDTO
                     {
                         Id = sec.Id,
@@ -154,6 +155,18 @@ namespace eduPortal.Areas.Instructor.Controllers
             obj.VideoCourseVm.Sections = obj.VideoCourseVm.Sections
                 .Where(s => !string.IsNullOrWhiteSpace(s.SectionTitle))
                 .ToList();
+
+            // CLEAN LECTURES - Add this!
+            foreach (var section in obj.VideoCourseVm.Sections)
+            {
+                if (section.Lectures != null)
+                {
+                    section.Lectures = section.Lectures
+                        .Where(l => !string.IsNullOrWhiteSpace(l.LectureTitle))
+                        .ToList();
+                }
+            }
+
             ModelState.Clear();
             TryValidateModel(obj.VideoCourseVm);
 
@@ -175,11 +188,7 @@ namespace eduPortal.Areas.Instructor.Controllers
             // getting the saving course logic from videoCourseServices 
             var savingCourse = _videoCourseService.saveCourse(obj, imgFile, vidFile);
 
-            //// ASSIGN VIDEOCOURSEID TO EACH SECTION 
-            //foreach (var section in obj.VideoCourseVm.Sections)
-            //{
-            //    section.VideoCourseId = (int)obj.VideoCourseVm.Id;
-            //}
+
 
             TempData["success"] = savingCourse.Id == 0 ?
             "Course Created Successfully!" :
@@ -202,6 +211,11 @@ namespace eduPortal.Areas.Instructor.Controllers
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
+            if (id == null || id == 0)
+            {
+                return Json(new { success = false, message = "Invalid course ID" });
+            }
+
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             var videoCourseList = _unitOfWork.Course.Get(u => u.Id == id && u is VideoCourse,
                      "Category,Sections,Sections.Lectures") as VideoCourse;
@@ -222,24 +236,31 @@ namespace eduPortal.Areas.Instructor.Controllers
                     System.IO.File.Delete(oldImgPath);
                 }
             }
-
-            foreach (var section in videoCourseList.Sections)
+            if (videoCourseList.Sections != null && videoCourseList.Sections.Any())
             {
-                foreach (var lecture in section.Lectures)
+                // Get all sections as a list (materialize the collection)
+                var sectionsToDelete = videoCourseList.Sections.ToList();
+                foreach (var section in sectionsToDelete)
                 {
-                    if (!string.IsNullOrEmpty(lecture.VideoUrl))
+                    if (section.Lectures != null && section.Lectures.Any())
                     {
-                        var oldVidPath = Path.Combine(wwwRootPath, (lecture.VideoUrl.TrimStart('\\')));
-
-                        if (System.IO.File.Exists(oldVidPath))
+                        var lecturesToDelete = section.Lectures.ToList();
+                        foreach (var lecture in lecturesToDelete)
                         {
-                            System.IO.File.Delete(oldVidPath);
+                            if (!string.IsNullOrEmpty(lecture.VideoUrl))
+                            {
+                                var oldVidPath = Path.Combine(wwwRootPath, (lecture.VideoUrl.TrimStart('\\')));
+
+                                if (System.IO.File.Exists(oldVidPath))
+                                {
+                                    System.IO.File.Delete(oldVidPath);
+                                }
+                            }
+                            _unitOfWork.Lecture.Remove(lecture);
                         }
                     }
-                    _unitOfWork.Lecture.Remove(lecture);
+                    _unitOfWork.Section.Remove(section);
                 }
-
-                _unitOfWork.Section.Remove(section);
             }
 
             _unitOfWork.Course.Remove(videoCourseList);

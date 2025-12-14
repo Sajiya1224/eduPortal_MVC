@@ -20,6 +20,8 @@ namespace eduPortal.Models.DTOs
         public int CategoryId { get; set; }
         public string? ApplicationUserId { get; set; }
         public string? ThumbnailUrl { get; set; }
+        public string? AddInfo { get; set; }
+        public string? courseContent { get; set; }
         public List<SectionDTO> Sections { get; set; } = new();
     }
 

@@ -277,19 +277,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9530),
+                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6927),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9536),
+                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6929),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 1, 10, 12, 49, 805, DateTimeKind.Utc).AddTicks(9537),
+                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6930),
                             Name = "Networking"
                         });
                 });
@@ -301,6 +301,9 @@ namespace eduPortal.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -332,6 +335,9 @@ namespace eduPortal.DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("courseContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -578,7 +584,8 @@ namespace eduPortal.DataAccess.Migrations
                 {
                     b.HasOne("eduPortal.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("eduPortal.Models.Category", "Category")
                         .WithMany()

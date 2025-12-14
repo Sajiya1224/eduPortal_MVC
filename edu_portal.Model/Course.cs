@@ -31,6 +31,7 @@ namespace eduPortal.Models
         [ForeignKey("ApplicationUserId")]
         public ApplicationUser ApplicationUser { get; set; }
 
-
+        public string? AddInfo { get; set; }
+        public string? courseContent { get; set; }
     }
 }

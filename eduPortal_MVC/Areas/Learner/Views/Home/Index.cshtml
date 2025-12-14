@@ -61,10 +61,11 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
         <div class="row g-4">
             @foreach (var obj in Model.CategoryList.Take(4))
             {
-                <div class="col-md-3 text-decoration-none">
+                <div class="col-md-3 ">
                     <div class="card shadow-sm h-100 rounded-full">
                         <div class="card-body p-4 text-center">
-                        <a asp-controller="Home" asp-action="BrowseCourse" class="card-title text-muted">@obj.Name</a>
+                            <a asp-controller="Home" asp-action="BrowseCourse" class="card-title fw-bold text-muted text-decoration-none">@obj.Name</a>
+                            
                         </div>
                     </div>
                 </div>
@@ -87,44 +88,52 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
         <h5 class="mb-5 text-center text-muted">Hand-picked courses to help you get started</h5>
 
         <div class="text-center mt-4">
-            <div class="row g-4">
+            <div class="row g-2">
+
                 @foreach (var course in Model.videoCourse.Take(4))
-                {
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId="@course.Id" 
-                        class="card shadow-sm border-0 h-100 text-decoration-none">
+                    {
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId="@course.Id"
+                               class="card shadow-sm border-0 h-100 text-decoration-none ">
 
-                            <!-- Course Image -->
-                            <img src="@course.ThumbnailUrl" class="card-img-top"
-                                 style="height: 180px; object-fit: cover;" />
+                                <!-- Course Image -->
+                                <img src="@course.ThumbnailUrl" class="card-img-top"
+                                     style="height: 180px; object-fit: cover;" />
 
-                            <div class="card-body">
+                                <div class="card-body">
 
-                                <!-- Title -->
-                                <h5 class="card-title fw-semibold">
-                                    @course.Title
-                                </h5>
+                                    <!-- Title -->
+                                    <h5 class="card-title text-muted fw-semibold">
+                                        @course.Title
+                                    </h5>
 
-                                <!-- Instructor Name -->
-                                <p class="text-muted mb-1">
-                                    @* @course.InstructorName *@
-                                </p>
+                                    <!-- Instructor Name -->
+                                    <p class="text-muted mb-1">
+                                        @* @(course.ApplicationUser?.Name ?? "Unknown instructor") *@
+                                    </p>
 
-                                <!-- Rating -->
-                                <div class="d-flex align-items-center mb-2">
-                                    @* <span class="text-warning me-1">★</span> *@
-                                    @* <span class="fw-bold">@course.Rating</span> *@
-                                    @* <span class="text-muted ms-1">(@course.RatingCount)</span> *@
+                                    <!-- Rating -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        @* <span class="text-warning me-1">★</span> *@
+                                        @* <span class="fw-bold">@course.Rating</span> *@
+                                        @* <span class="text-muted ms-1">(@course.RatingCount)</span> *@
+                                    </div>
+
+                                    <!-- Price -->
+                                    <h5 class="fw-bold text-muted">$@course.Price</h5>
+
                                 </div>
-
-                                <!-- Price -->
-                                <h5 class="fw-bold">$@course.Price</h5>
-
-                            </div>
-                        </a>
-                    </div>
-                }
+                            </a>
+                        </div>
+                    }
+               
+                <div >
+                    <i class="bi bi-arrow-right-circle opacity-25" style="font-size:30px;"></i>
+                </div>
             </div>
+
+          
+
         </div>
     </div>
 </div>

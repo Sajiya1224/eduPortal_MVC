@@ -1,8 +1,5 @@
 ﻿	@model VideoCourseVM
 
-
-
-
 <!--Back to Create page link-->
 <div class="col-ms-6 m-5 text-end">
 	<a asp-controller="Course" asp-action="CourseType" class="btn cat-btn text-decoration-none">Back to Course Type</a>
@@ -13,7 +10,6 @@
 		<input asp-for="VideoCourseVm.Id" hidden />
 		<input asp-for="VideoCourseVm.ApplicationUserId" hidden />
 		<!--Basic Information Form-->
-
 
 		<div class="container col-12">
 			<h2 class="py-2">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create") Video Course</h2>
@@ -35,13 +31,12 @@
 						<div class="form-floating py-2 col-10">
 							<textarea asp-for="VideoCourseVm.Description" class="form-control border-0 shadow"></textarea>
 							<label asp-for="VideoCourseVm.Description" class="ms-2"></label>
-
 						</div>
 
 						<div class="form-floating py-2 col-10">
+							<input asp-for="VideoCourseVm.ThumbnailUrl" hidden />
 							<input type="file" name="imgFile" asp-for="VideoCourseVm.ThumbnailUrl" class="form-control border-0 shadow" />
 							<label asp-for="VideoCourseVm.ThumbnailUrl" class="ms-2"></label>
-							<span asp-validation-for="VideoCourseVm.ThumbnailUrl" class="text-danger"></span>
 						</div>
 
 						<div class="form-floating py-2 col-10">
@@ -64,14 +59,12 @@
 						</div>
 
 						<div class="form-floating py-2 col-10">
-
 							<input asp-for="VideoCourseVm.Price" class="form-control border-0 shadow" />
 							<label asp-for="VideoCourseVm.Price" class="ms-2"></label>
 							<span asp-validation-for="VideoCourseVm.Price" class="text-danger"></span>
 						</div>
 
 						<div class="form-floating py-2 col-10">
-
 							<input asp-for="VideoCourseVm.Duration" class="form-control border-0 shadow" />
 							<label asp-for="VideoCourseVm.Duration" class="ms-2"></label>
 							<span asp-validation-for="VideoCourseVm.Duration" class="text-danger"></span>
@@ -83,10 +76,8 @@
 							 style="border-radius:5px; border: 1px black" />
 					</div>
 				</div>
-
 			</div>
 		</div>
-
 
 		<div class="container  col-12">
 			<p style="font-size:30px">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create") Course Content</p>
@@ -99,13 +90,17 @@
 			@for (int i = 0; i < Model.VideoCourseVm.Sections.Count; i++)
 			{
 				<div class="container card shadow-sm border-0 p-4 mb-4 section-item" style="border-radius: 14px;">
-					<div class="col-12">
-						<p class="p-2">Chapter @(i + 1)</p>
+					<div class="row">
+						<div class="col-11"><p class="p-2 chapter-title">Chapter @(i + 1)</p></div>
+						<div class="col-1">
+							<button type="button" class="btn btn-link text-danger p-0 ms-auto remove-chapter">
+								<i class="bi bi-trash"></i>
+							</button>
+						</div>
 					</div>
 
 					<div class="row g-3">
 						<input asp-for="VideoCourseVm.Sections[@i].Id" hidden />
-						@* <input asp-for="VideoCourseVm.Sections[@i].VideoCourseId" hidden /> *@
 
 						<div class="form-floating py-2 col-12">
 							<input asp-for="VideoCourseVm.Sections[@i].SectionTitle" class="form-control border-0 shadow" />
@@ -125,8 +120,13 @@
 							@for (int j = 0; j < Model.VideoCourseVm.Sections[i].Lectures.Count; j++)
 							{
 								<div class="container card shadow-sm border-0 p-4 mb-3 lecture-item" style="border-radius: 14px;">
-									<div class="col-12">
-										<p class="p-2">Lecture @(j + 1)</p>
+									<div class="row">
+										<div class="col-11"><p class="p-2 lecture-title">Lecture @(j + 1)</p></div>
+										<div class="col-1">
+											<button type="button" class="btn btn-link text-danger p-0 ms-auto remove-lecture">
+												<i class="bi bi-trash"></i>
+											</button>
+										</div>
 									</div>
 
 									<div class="row g-3">
@@ -145,8 +145,6 @@
 											<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" hidden />
 											<input type="file" name="vidFile" class="form-control border-0 shadow" />
 											<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="ms-2"></label>
-											<span asp-validation-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl"
-												  class="text-danger"></span>
 										</div>
 									</div>
 								</div>
@@ -157,24 +155,20 @@
 			}
 		</div>
 
-
-
-		<!-- Additional info + submit buttons (same as before) -->
+		<!-- Additional info + submit buttons -->
 		<div class="container card shadow-sm boreder-0 p-4 mb-4" style="border-radius: 14px;">
 			<div class="col-12">
-				<p class="p-2">Additional Information</p>
-				@* <div class="form-floating py-2"> *@
-
-				@* 	<input asp-for="VideoCourseVm.Price" class="form-control border-0 shadow" /> *@
-				@* 	<label asp-for="VideoCourseVm.Price" class="ms-2"></label> *@
-				@* 	<span asp-validation-for="VideoCourseVm.Price" class="text-danger"></span> *@
-				@* </div> *@
+				<p class="p-2">What will student Learn?</p>
+				<div class="form-floating py-2">
+					<textarea asp-for="VideoCourseVm.AddInfo" class="form-control border-0 shadow"></textarea>
+					<label asp-for="VideoCourseVm.AddInfo" class="ms-2"></label>
+				</div>
 			</div>
 		</div>
 
 		<div class="col-ms-12 m-2 text-end">
 			<a asp-controller="Course" asp-action="Index" class="btn cat-btn text-decoration-none">Cancel</a>
-			<button type="submit" class="btn btn-dark text-decoration-none">@(Model.VideoCourseVm.Id == 0 ? "Update" : "Create") </button>
+			<button type="submit" class="btn btn-dark text-decoration-none">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create")</button>
 		</div>
 	</form>
 
@@ -188,7 +182,6 @@
 						<i class="bi bi-trash"></i>
 					</button>
 				</div>
-
 			</div>
 
 			<div class="row g-3">
@@ -221,13 +214,12 @@
 						<i class="bi bi-trash"></i>
 					</button>
 				</div>
-
 			</div>
 
 			<div class="row g-3">
 				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].Id" />
 				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].SectionId" />
-				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].VideoUrl"/>
+				<input type="hidden" name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].VideoUrl" />
 
 				<div class="form-floating py-2 col-12">
 					<input name="VideoCourseVm.Sections[INDEX].Lectures[LECTURE_INDEX].LectureTitle"
@@ -244,14 +236,6 @@
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
 @section Scripts {
 	<script>
 		tinymce.init({
@@ -266,6 +250,90 @@
 	<script>
 		let chapterIndex = @Model.VideoCourseVm.Sections.Count;
 
+		function reindexSectionsAndLectures() {
+			const sections = document.querySelectorAll('#sectionsContainer .section-item');
+			sections.forEach((section, sectionIndex) => {
+				// Update chapter title
+				const chapterTitle = section.querySelector('.chapter-title, .p-2');
+				if (chapterTitle && chapterTitle.textContent.includes('Chapter')) {
+					chapterTitle.textContent = 'Chapter ' + (sectionIndex + 1);
+				}
+
+				// Reindex section inputs
+				section.querySelectorAll('input, textarea, select').forEach(input => {
+					if (input.name) {
+						input.name = input.name.replace(/Sections\[\d+\]/, `Sections[${sectionIndex}]`);
+					}
+				});
+
+				// Reindex lectures within this section
+				const lectures = section.querySelectorAll('.lecture-container .lecture-item');
+				lectures.forEach((lecture, lectureIndex) => {
+					// Update lecture title
+					const lectureTitle = lecture.querySelector('.lecture-title, .p-2');
+					if (lectureTitle && lectureTitle.textContent.includes('Lecture')) {
+						lectureTitle.textContent = 'Lecture ' + (lectureIndex + 1);
+					}
+
+					// Reindex lecture inputs
+					lecture.querySelectorAll('input, textarea, select').forEach(input => {
+						if (input.name) {
+							input.name = input.name
+								.replace(/Sections\[\d+\]/, `Sections[${sectionIndex}]`)
+								.replace(/Lectures\[\d+\]/, `Lectures[${lectureIndex}]`);
+						}
+					});
+				});
+
+				// Update data-section-index on Add Lecture button
+				const addLectureBtn = section.querySelector('.addLectureBtn');
+				if (addLectureBtn) {
+					addLectureBtn.setAttribute('data-section-index', sectionIndex);
+				}
+			});
+
+			// Update chapterIndex to be the next available index
+			chapterIndex = sections.length;
+		}
+
+		// Function to get current section index dynamically
+		function getCurrentSectionIndex(sectionElement) {
+			const sections = Array.from(document.querySelectorAll('#sectionsContainer .section-item'));
+			return sections.indexOf(sectionElement);
+		}
+
+		// Function to attach event listeners to a section
+		function attachSectionListeners(sectionElement) {
+			// Attach remove chapter listener
+			const removeBtn = sectionElement.querySelector('.remove-chapter');
+			if (removeBtn) {
+				// Remove existing listener by cloning
+				const newRemoveBtn = removeBtn.cloneNode(true);
+				removeBtn.parentNode.replaceChild(newRemoveBtn, removeBtn);
+
+				newRemoveBtn.addEventListener('click', function() {
+					sectionElement.remove();
+					reindexSectionsAndLectures();
+				});
+			}
+
+			// Attach add lecture listener - get index dynamically when clicked
+			const addLectureBtn = sectionElement.querySelector('.addLectureBtn');
+			if (addLectureBtn) {
+				// Remove existing listener by cloning
+				const newAddBtn = addLectureBtn.cloneNode(true);
+				addLectureBtn.parentNode.replaceChild(newAddBtn, addLectureBtn);
+
+				newAddBtn.addEventListener('click', function(e) {
+					e.preventDefault();
+					// Get current section index dynamically
+					const currentIndex = getCurrentSectionIndex(sectionElement);
+					addLecture(sectionElement, currentIndex);
+				});
+			}
+		}
+
+		// Add Chapter button
 		document.getElementById("addChapterBtn").addEventListener("click", function (e) {
 			e.preventDefault();
 
@@ -277,33 +345,27 @@
 
 			clone.querySelector(".chapter-title").innerText = "Chapter " + (chapterIndex + 1);
 
-			clone.querySelector(".addLectureBtn").addEventListener("click", function (evt) {
-				evt.preventDefault();
-				addLecture(clone, chapterIndex);
-			});
+			// Attach listeners to the new chapter
+			attachSectionListeners(clone);
 
 			document.getElementById("sectionsContainer").appendChild(clone);
 			chapterIndex++;
 		});
 
-		// Wire existing “Add Lecture” buttons (rendered from model)
-		document.querySelectorAll("#sectionsContainer .addLectureBtn").forEach(btn => {
-			const sectionIdx = parseInt(btn.getAttribute("data-section-index"), 10);
-			btn.addEventListener("click", function (e) {
-				e.preventDefault();
-				addLecture(btn.closest(".section-item"), sectionIdx);
+		// Wire existing sections (rendered from model)
+		document.querySelectorAll("#sectionsContainer .section-item").forEach((section) => {
+			attachSectionListeners(section);
+		});
+
+		// Wire existing remove lecture buttons
+		document.querySelectorAll(".lecture-item .remove-lecture").forEach(btn => {
+			btn.addEventListener("click", function() {
+				btn.closest(".lecture-item").remove();
+				reindexSectionsAndLectures();
 			});
 		});
 
-		document.querySelectorAll(".lecture-item .remove-lecture").forEach(btn => {
-			btn.addEventListener("click", () => btn.closest(".lecture-item").remove());
-		});
-
-		document.querySelectorAll(".section-item .remove-chapter").forEach(btn => {
-			btn.addEventListener("click", () => btn.closest(".section-item").remove());
-		});
-
-				function addLecture(chapterDiv, chapIdx) {
+		function addLecture(chapterDiv, chapIdx) {
 			const container = chapterDiv.querySelector(".lecture-container");
 			const template = document.getElementById("lectureTemplate");
 			if (!container || !template) return;
@@ -316,34 +378,19 @@
 				.replaceAll("LECTURE_INDEX", lectureIndex);
 
 			clone.querySelector(".lecture-title").innerText = "Lecture " + (lectureIndex + 1);
-			clone.querySelector(".remove-lecture").addEventListener("click", () => clone.remove());
+
+			// Attach remove listener
+			clone.querySelector(".remove-lecture").addEventListener("click", function() {
+				clone.remove();
+				reindexSectionsAndLectures();
+			});
 
 			container.appendChild(clone);
 		}
-			 // document.querySelector('form').addEventListener('submit', function(e) {
-// Reindex sections and lectures before submitting
-			// document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
-			// 	sec.querySelectorAll('input, textarea, select').forEach(input => {
-			// 		input.name = input.name.replace(/Sections\[\d+\]/, `Sections[${i}]`);
-			// 	});
-			// });
 
-// For lectures inside each section
-		// 	document.querySelectorAll('#sectionsContainer .section-item').forEach((sec, i) => {
-		// 		sec.querySelectorAll('.lecture-container .lecture-item').forEach((lec, j) => {
-		// 			lec.querySelectorAll('input, textarea, select').forEach(input => {
-		// 				input.name = input.name.replace(/Lectures\[\d+\]/, `Lectures[${j}]`);
-		// 			});
-		// 		});
-		// 	});
-		// });
-
+		// Reindex before form submission
+		document.querySelector('form').addEventListener('submit', function(e) {
+			reindexSectionsAndLectures();
+		});
 	</script>
-
 }
-
-
-
-
-
-
