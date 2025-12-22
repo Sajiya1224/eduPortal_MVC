@@ -47,11 +47,16 @@ namespace eduPortal.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includeproperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeproperties = null)
         {
 
             IQueryable<T> query = dbSet;
-            if(!string.IsNullOrEmpty(includeproperties))
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrEmpty(includeproperties))
             {
                 foreach (var property in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {

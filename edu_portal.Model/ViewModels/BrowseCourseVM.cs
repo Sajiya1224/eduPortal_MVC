@@ -15,5 +15,7 @@ namespace eduPortal.Models.ViewModels
         [ValidateNever]
         public IEnumerable<Category> CategoryList { get; set; }
 
+        
+
     }
 }

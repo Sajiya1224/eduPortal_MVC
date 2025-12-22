@@ -20,6 +20,8 @@ namespace eduPortal.DataAccess.dataContext
         public DbSet<Section> section { get; set; }
         public DbSet<Lecture> lecture { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<OrderHeader> OrderHeader { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

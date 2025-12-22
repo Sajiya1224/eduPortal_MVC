@@ -1,10 +1,9 @@
 ﻿
 @model BrowseCourseVM
 
-@* @{ *@
-@*     ViewData["Title"] = "Courses"; *@
-@*     var total = Model?.Count() ?? 0; *@
-@* } *@
+@{
+    var currentCategoryId = Context.Request.Query["categoryId"].ToString();
+}
 
 
 <div class="container my-4">
@@ -13,10 +12,19 @@
     <h5 class="mb-3" style="color: rgba(200,200,200,1)">Discover your next learning adventure from our collection</h5>
 
     <div class="category-scroll d-flex gap-3 mb-4">
-        <button class="cat-btn ">All Courses</button>
+        <a asp-action="BrowseCourse"
+           asp-controller="Home"
+           class="cat-btn text-dark text-decoration-none @(string.IsNullOrEmpty(currentCategoryId) ? "active" : "")">
+            All Courses
+        </a>
         @foreach (var obj in Model.CategoryList)
         {
-            <button class="cat-btn">@obj.Name</button>
+            <a asp-action="BrowseCourse"
+               asp-controller="Home"
+               asp-route-categoryId="@obj.Id"
+               class="cat-btn text-dark text-decoration-none @(currentCategoryId == obj.Id.ToString() ? "active" : "")">
+                @obj.Name
+            </a>
         }
     </div>
 
@@ -33,7 +41,10 @@
             @foreach (var course in Model.videoCourse)
         {
             <div class="col-lg-3 col-md-4 col-sm-6">
-                <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId ="@course.Id" class="card shadow-sm border-0 h-100 text-decoration-none text-muted">
+                <a asp-controller="Home" 
+                    asp-action="Details" 
+                    asp-route-VideoCourseId ="@course.Id" 
+                    class="card shadow-sm border-0 h-100 text-decoration-none text-muted">
 
                     <!-- Course Image -->
                     <img src="@course.ThumbnailUrl" class="card-img-top" 
@@ -54,7 +65,7 @@
 
                         <!-- Instructor Name -->
                         <p class="text-muted mb-1">
-                                @* Created by @(Model.VCourse.ApplicationUser?.Name ?? "Unknown instructor") *@
+                                Created by @(course.ApplicationUser?.Name ?? "Unknown instructor")
                         </p>
 
                         <!-- Rating -->

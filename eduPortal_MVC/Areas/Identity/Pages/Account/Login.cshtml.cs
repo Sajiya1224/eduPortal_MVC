@@ -14,16 +14,18 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using eduPortal.Models;
+using eduPortal.Utility;
 
 namespace eduPortalWeb.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -93,6 +95,12 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
+            // Check for TempData message from registration
+            if (TempData["InfoMessage"] != null)
+            {
+                ModelState.AddModelError(string.Empty, TempData["InfoMessage"].ToString());
+            }
+
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -111,26 +119,52 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+
+                if (user != null)
+                {
+                    // Check if user is an instructor
+                    var isInstructor = await _userManager.IsInRoleAsync(user, SD.Role_Instructor);
+
+                    // If instructor, check approval status
+                    if (isInstructor)
+                    {
+                        // IsApproved = null means Pending
+                        if (user.IsApproved == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Your instructor account is pending approval. Please wait for admin approval.");
+                            return Page();
+                        }
+                        // IsApproved = false means Rejected
+                        else if (user.IsApproved == false)
+                        {
+                            ModelState.AddModelError(string.Empty, "Your instructor account is rejected.");
+                            return Page();
+                        }
+                        // IsApproved = true means Approved - allow login (continue below)
+                    }
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    //var user = await _userManager.FindByEmailAsync(Input.Email);
 
 
-                    if (await _userManager.IsInRoleAsync(user, "Instructor"))
-                    {
-                        return LocalRedirect("/Instructor/Instructor/Dashboard");
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, "Learner"))
-                    {
-                        return LocalRedirect("Learner/Home/Index");
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        return LocalRedirect("/Admin/Admin/Dashboard");
-                    }
+                    //if (await _userManager.IsInRoleAsync(user, "Instructor"))
+                    //{
+                    //    return LocalRedirect("/Instructor/Instructor/Dashboard");
+                    //}
+                    //else if (await _userManager.IsInRoleAsync(user, "Learner"))
+                    //{
+                    //    return LocalRedirect("/Learner/Home/Index");
+                    //}
+                    //else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    //{
+                    //    return LocalRedirect("/Admin/Admin/Dashboard");
+                    //}
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

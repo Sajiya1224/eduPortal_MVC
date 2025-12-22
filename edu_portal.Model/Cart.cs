@@ -23,5 +23,6 @@ namespace eduPortal.Models
         [ValidateNever]
         public ApplicationUser ApplicationUsers { get; set; }
 
+        public double Price { get; set; }
     }
 }

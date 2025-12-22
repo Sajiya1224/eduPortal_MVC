@@ -22,6 +22,7 @@ namespace eduPortal.Models.DTOs
         public string? ThumbnailUrl { get; set; }
         public string? AddInfo { get; set; }
         public string? courseContent { get; set; }
+        public bool IsPublished { get; set; } = false;
         public List<SectionDTO> Sections { get; set; } = new();
     }
 

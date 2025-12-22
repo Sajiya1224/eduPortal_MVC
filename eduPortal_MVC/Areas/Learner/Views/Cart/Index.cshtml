@@ -1,0 +1,72 @@
+﻿@model CartVM
+
+<form method="post">
+    <div class="container cart-container mt-5">
+        <div class="row">
+            @if (Model.cartList.Count() == null || Model.cartList.Count() == 0)
+            {
+                <div class="col-12">
+                    <h2 class="fw-bold">Shopping Cart</h2>
+                    <div class="text-center ms-5">
+                        <p class="text-muted">
+                            
+                            <i class="bi bi-cart" style="font-size:180px"></i><br />
+                            <b class="text-dark">Your Cart Is Empty</b><br />
+                            The right course is waiting—explore until you find it.
+                        </p>
+                        <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-dark btn-lg px-4 py-2 shadow-sm">Keep Searching </a>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <!-- LEFT: Cart Items -->
+                <div class="col-md-8">
+                    <h2 class="fw-bold">Shopping Cart</h2>
+
+                    <p class="text-muted">@Model.cartList.Count() Course in Cart</p>
+
+                    @foreach (var item in Model.cartList)
+                    {
+                        <div class="cart-item d-flex align-items-start mb-4 p-3 border rounded">
+                            <img src="@item.VCourse.ThumbnailUrl" class="course-img" />
+
+                            <div class="ms-3 flex-grow-1">
+                                <h5 class="fw-bold">@item.VCourse.Title</h5>
+                                <p class="text-muted">By @(item.VCourse.ApplicationUser?.Name ?? "Unknown instructor")</p>
+                                @* <span class="text-warning ms-2">⭐ @item.Rating</span> *@
+                                @* <small class="text-muted">(@item.Reviews)</small> *@
+
+                                <div class="mt-2">
+                                    <a asp-controller="Cart" asp-action="Delete" asp-route-cartId="@item.Id" class="action-link text-danger"><i class="bi bi-trash"></i>Remove</a> |
+                                    <a href="#" class="action-link">Save for Later</a> |
+                                    <a href="#" class="action-link">Move to Wishlist</a>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <h5 class="text-purple fw-bold">$@item.VCourse.Price</h5>
+                                @* <small class="text-decoration-line-through text-muted">$@item.OldPrice</small> *@
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- RIGHT: Summary -->
+                <div class="col-md-4">
+                    <div class="summary-box p-4 rounded border">
+                        <h6 class="text-muted">Total:</h6>
+                        <h2 class="fw-bold">$ @Model.orderHeader.OrderTotal</h2>
+
+                        @* <button type="submit" value="Place Order" class="btn btn-dark w-100 my-3">Proceed to Checkout →</button> *@
+                        <a asp-controller="cart" asp-action="Summary" class="btn btn-dark w-100 my-3">Proceed to Checkout →</a>
+
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+
+</form>

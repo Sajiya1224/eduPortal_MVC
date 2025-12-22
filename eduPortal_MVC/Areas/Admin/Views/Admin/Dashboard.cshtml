@@ -1,68 +1,282 @@
-﻿
+﻿@model AdminDashboardVM
 
+<div class="container mt-4">
+    <div class="row">
 
+        <!-- LEFT SIDE (Table / Main Content) -->
+        <div class="col-lg-8">
+            <h2 class="mb-3">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Welcome, <strong>@(ViewBag.AdminName ?? "Admin")</strong></p>
+            <h5 class="mb-3 text-muted">Manage and monitor your platform</h5>
 
-<div class="container my-4">
-
-    <h2 class="mb-3">Admin Dashboard</h2>
-    <h5 class="mb-3 text-muted">Manage and monitor your platform</h5>
-
-    <!-- Stats Cards -->
-    <div class="row mb-4 g-3">
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>Total Users</span>
-                    <i class="bi bi-people"></i>
+            <!-- Stats Cards -->
+            <div class="row mb-4 g-3">
+                <div class="col-md-3">
+                    <div class="card shadow-sm p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Total Users</span>
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h4 class="fw-bold">@Model.TotalUsersCount</h4>
+                        @* <small class="text-muted">+2,345 this month</small> *@
+                    </div>
                 </div>
-                <h4 class="fw-bold">54,823</h4>
-                @* <small class="text-muted">+2,345 this month</small> *@
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>Total Courses</span>
-                    <i class="bi bi-journal-bookmark"></i>
+                <div class="col-md-3">
+                    <div class="card shadow-sm p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Total Courses</span>
+                            <i class="bi bi-journal-bookmark"></i>
+                        </div>
+                        <h4 class="fw-bold">@Model.TotalCoursesCount</h4>
+                        @* <small class="text-muted">+42 pending approval</small> *@
+                    </div>
                 </div>
-                <h4 class="fw-bold">1,842</h4>
-                @* <small class="text-muted">+42 pending approval</small> *@
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>Total Enrollments</span>
-                    <i class="bi bi-graph-up"></i>
+                <div class="col-md-3">
+                    <div class="card shadow-sm p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Total Enrollments</span>
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h4 class="fw-bold">@Model.TotalEnrollmentsCount</h4>
+                        @* <small class="text-muted">+8,234 this month</small> *@
+                    </div>
                 </div>
-                <h4 class="fw-bold">168K</h4>
-                @* <small class="text-muted">+8,234 this month</small> *@
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>Revenue</span>
-                    <i class="bi bi-currency-dollar"></i>
+                <div class="col-md-3">
+                    <div class="card shadow-sm p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Revenue</span>
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <h4 class="fw-bold">@Model.TotalRevenue</h4>
+                        @* <small class="text-muted">+$185K this month</small> *@
+                    </div>
                 </div>
-                <h4 class="fw-bold">$2.4M</h4>
-                @* <small class="text-muted">+$185K this month</small> *@
             </div>
+
+            <!-- Tabs for Sections -->
+            <div class="container mt-4">
+
+                <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#course">Course Approvals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#enrollement">Enrollement</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#instructor">Instructor Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#categories">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#users">Recent Users</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Curriculum Tab -->
+                    <div class="tab-pane fade show active mt-4" id="course">
+
+                        <a class="btn btn-dark btn-sm ms-2" asp-area="Instructor" asp-controller="Course" asp-action="Index">
+                            <i class="bi bi-eye-fill">View All</i>
+                        </a>
+                        <div class=" m-lg-0 py-3 text-center">
+                            <h2 class="text-dark">Course List</h2>
+                        </div>
+                        <div class="card-body p-3">
+
+                            <table id="tblCourseData1" class="table table-bordered table-striped display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Duration</th>
+                                        <th>Level</th>
+                                        <th>IsPublished</th>
+                                        <th>InstructorId</th>
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                    <div class="tab-pane fade show mt-4" id="enrollement">
+                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Enrollement" asp-action="Index">
+                            <i class="bi bi-eye-fill">View All</i>
+                        </a>
+                        <div class=" m-lg-0 py-3 text-center">
+                            <h2 class="text-dark">Enrollement List</h2>
+                        </div>
+                        <div class="card-body p-3">
+                            <table id="tblenrollData1" class="table table-bordered table-striped display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Course Name</th>
+                                        <th>Instructor Name</th>
+                                        <th>Total</th>
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade show mt-4" id="instructor">
+
+                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Admin" asp-action="InstructorData">
+                            <i class="bi bi-eye-fill">View All</i>
+                        </a>
+                        <div class=" m-lg-0 py-3 text-center">
+                            <h2 class="text-dark">Instructor List</h2>
+                        </div>
+                        <div class="card-body p-3">
+                            <table id="tblInstructorData1" class="table table-bordered table-striped display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Gender</th>
+                                        <th>CV</th>
+                                        <th>Teaching Video</th>
+                                    
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade show mt-4" id="categories">
+
+                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                            <i class="bi bi-eye-fill">View All</i>
+                        </a>
+                        <div class=" m-lg-0 py-3 text-center">
+                            <h2 class="text-dark">Category List</h2>
+                        </div>
+                        <div class="card-body p-3">
+                            <table id="tblCatData1" class="table table-bordered table-striped display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Created At</th>
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade show mt-4" id="users">
+
+                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Admin" asp-action="UserData">
+                            <i class="bi bi-eye-fill">View All</i>
+                        </a>
+                        <div class=" m-lg-0 py-3 text-center">
+                            <h2 class="text-dark">User List</h2>
+                        </div>
+                        <div class="card-body p-3">
+                            <table id="tblUserData1" class="table table-bordered table-striped display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Gender</th>
+                                        <th>Role</th>
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            
         </div>
+
+        <!-- RIGHT SIDE (Vertical Cards) -->
+        <div class="col-lg-4 p-4">
+
+            <br /><br /><br />
+            <div class="card mt-3 p-3 shadow-sm">
+                <div class="d-flex align-items-center gap-3 mt-2">
+                    <div>
+
+                        <h6 class="mb-0 fw-bold">Platform Overview</h6>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Active Students:</span>
+                        <strong>@Model.TotalEnrollmentsCount.ToString("N0")</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Active Instructors:</span>
+                        <strong>@Model.ActiveInstructor.ToString("N0")</strong>
+                    </div>
+                    
+
+                </div>
+            </div>
+            <div class="card mt-3 p-3 shadow-sm">
+                <div class="d-flex align-items-center gap-3 mt-2">
+                    <div>
+
+                        <h6 class="mb-0 fw-bold">Quick Actions</h6>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+
+                    <div class="p-2">
+                        <a asp-area="Admin" asp-controller="Admin" asp-action="InstructorData"
+                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-mortarboard-fill " style="font-size:20px;"></i>  Instructor Request</a>
+                    </div>
+
+                    <div class="p-2">
+                        <a asp-area="Admin" asp-controller="Admin" asp-action="UserData"
+                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-person-fill" style="font-size:20px;"></i>  User List</a>
+                    </div>
+
+                    <div class="p-2">
+                        <a asp-area="Admin" asp-controller="Enrollement" asp-action="Index"
+                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-people-fill" style="font-size:20px;"></i>  Enrolled Students</a>
+                    </div>
+                    <div class="p-2">
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index"
+                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-plus-circle" style="font-size:20px;"></i> Create Category</a>
+                    </div>
+
+                </div>
+            </div>
+         
+        </div>
+      
     </div>
-
-    <!-- Tabs for Sections -->
-    <div class="category-scroll d-flex gap-3 mb-4">
-        <a asp-area="Admin" asp-controller="" asp-action="" class="cat-btn text-decoration-none  text-dark">Course Approvals</a>
-        <a asp-area="Admin" asp-controller="" asp-action="" class="cat-btn text-decoration-none  text-dark">Instructor Requests</a>
-        <a asp-area="Admin" asp-controller="Category" asp-action="index" class="cat-btn text-decoration-none  text-dark">Categories</a>
-        <a asp-area="Admin" asp-controller="" asp-action="" class="cat-btn text-decoration-none  text-dark">Recent Users</a>
-       
-    </div>
-
-    <!-- Course Categories Table -->
-    
-
 </div>
 
 
+
+@section Scripts {
+    <script src="~/js/Category.js"></script>
+    <script src="~/js/Course.js"></script>
+    <script src="~/js/instructor.js"></script>
+    <script src="~/js/enrollement.js"></script>
+}

@@ -2,11 +2,11 @@
 
 
 $(function () {
-    LoadDataTable();
+    LoadCatDataTable();
 });
 
-function LoadDataTable() {
-    dataTable = $('#tblData').DataTable({
+function LoadCatDataTable() {
+    dataTable = $('#tblCatData').DataTable({
         "ajax": { url: '/admin/category/getall' },
         "columns": [
             { data: 'name', width: "33%" },
@@ -25,6 +25,15 @@ function LoadDataTable() {
                 },
                 width: "33%"
             }
+        ]
+    });
+
+    dataTable = $('#tblCatData1').DataTable({
+        "ajax": { url: '/admin/category/getall?take=4' },
+        "columns": [
+            { data: 'name', width: "33%" },
+            { data: 'createdAt', width: "33%" },
+
         ]
     });
 }

@@ -56,6 +56,7 @@ namespace eduPortal.DataAccess.Services
                     ApplicationUserId = obj.VideoCourseVm.ApplicationUserId,
                     ThumbnailUrl = obj.VideoCourseVm.ThumbnailUrl,
                     AddInfo = obj.VideoCourseVm.AddInfo,
+                    IsPublished = obj.VideoCourseVm.IsPublished
                     
                 };
                _unitOfWork.Course.Add(course);

@@ -11,5 +11,11 @@ namespace eduPortal.Utility
         public const string Role_Learner = "Learner";
         public const string Role_Instructor = "Instructor";
         public const string Role_Admin = "Admin";
+
+
+        public const string StatusApproved = "Approved";
+        public const string StatusRejected = "Rejected";
+
+        public const string PaymentStatusApproved = "Rejected";
     }
 }

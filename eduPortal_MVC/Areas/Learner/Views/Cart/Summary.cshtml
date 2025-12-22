@@ -1,0 +1,69 @@
+﻿@model CartVM
+
+<div class="container my-5">
+    <h2 class="mb-4">Checkout</h2>
+
+    <div class="row">
+        <!-- Billing Information -->
+        <div class="col-lg-8">
+            <div class="card p-4 mb-4">
+                <h5 class="mb-3">Billing Information</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        <input asp-for="@Model.orderHeader.ApplicationUsers.Name" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Email Address</label>
+                        <input asp-for="@Model.orderHeader.ApplicationUsers.Email" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card p-4">
+                <h5 class="mb-3">Order Summary</h5>
+
+                @foreach (var item in Model.cartList)
+                {
+                    <div class="d-flex mb-3">
+                        <img src="@item.VCourse.ThumbnailUrl"
+                             class="rounded me-2"
+                             width="60" height="60" />
+
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">@item.VCourse.Title</div>
+                            <small class="text-muted">@(item.VCourse.ApplicationUser?.Name ?? "Unknown instructor")</small>
+                        </div>
+
+                        <div class="fw-bold">
+                            $@item.VCourse.Price
+                        </div>
+                    </div>
+                }
+
+                <hr />
+
+                <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Total</span>
+                    <span>$@Model.orderHeader.OrderTotal</span>
+                </div>
+
+                <form method="post">
+                    <button type="submit" value="Place Order" class="btn btn-dark w-100 mt-3">
+                        Complete Purchase
+                    </button>
+                </form>
+
+                <ul class="list-unstyled mt-3 text-success small">
+                    <li><i class="bi bi-check"></i> 30-day money-back guarantee</li>
+                    <li><i class="bi bi-check"></i> Instant access</li>
+                    <li><i class="bi bi-check"></i> Lifetime updates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

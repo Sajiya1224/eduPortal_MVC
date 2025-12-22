@@ -6,10 +6,9 @@
     <title>@ViewData["Title"] LearnX</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/eduPortal_MVC.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel=" stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-    <link rel=" stylesheet" href="//cdn.datatables.net/2.3.5/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/2.3.5/css/dataTables.dataTables.min.css" />
 </head>
 <body>
     <header>
@@ -24,7 +23,10 @@
                     <ul class="navbar-nav ms-auto">
                         @if(User.IsInRole(SD.Role_Instructor))
                         {
-                            <li class="nav-item">
+                            <li class="nav-item p-2">
+                                <a class="nav-link text-dark " asp-area="Instructor" asp-controller="Instructor" asp-action="Dashboard">Instructor Dashboard</a>
+                            </li>
+                            <li class="nav-item p-2">
                                 <a class="nav-link text-light btn btn-dark btn-lg px-4 py-2 shadow-sm" asp-area="Instructor" asp-controller="Course" asp-action="CourseType"><i class="bi bi-plus-circle"></i> Create Course</a>
                             </li>
                         }
@@ -36,43 +38,40 @@
                                        type="search"
                                        placeholder="Search User and courses..."
                                        aria-label="Search">
-                            </form> 
+                            </form>
+                            <a class="nav-link p-2" text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
                             
                         }
 
                         @if(User.IsInRole(SD.Role_Learner))
                         {
-                            <form class="d-flex mx-auto custom-search">
+                            <li class="nav-item p-2 me-auto">
+                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item p-2 me-auto">
+                                <a class="nav-link text-dark " asp-area="Learner" asp-controller="Cart" asp-action="Index"><i class="bi bi-cart"></i>&nbsp;</a>
+                            </li>
+
+                            <form class="d-flex mx-auto custom-search p-2">
                                 <input class="form-control rounded-pill search-input"
                                        type="search"
                                        placeholder="Search courses..."
                                        aria-label="Search">
                             </form>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
+
+
+                            <li class="nav-item p-2 ms-auto">
                                 <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse">Courses</a>
                             </li>
-                              <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="" asp-action="">My Enrollement</a>  
-                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item p-2 ms-auto">
+                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Enrollement">My Enrollement</a>
+                            </li>
+                            <li class="nav-item p-2 ms-auto">
                                 <a class="nav-link text-dark" asp-area="Identity"  asp-page="/Account/Register" asp-route-role="Instructor">Become an Instructor</a>
                             </li>
 
                         } 
-                          
-                        @*  <li class="nav-item">  *@
-                        @*      <a class="nav-link text-dark" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>  *@
-                        @*  </li>  *@
-                        @*  <li class="nav-item">  *@
-                        @*      <a class="nav-link text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>  *@
-                        @*  </li> *@
-                        @* <li class="nav-item"> *@
-                        @*     <a class="nav-link text-dark" asp-area="Instructor" asp-controller="Instructor" asp-action="Index">Instructor Dashboard</a> *@
-                        @* </li> *@
                     </ul>
                    
                     <partial name="_LoginPartial"/>
@@ -87,11 +86,7 @@
         </main>
     </div>
 
-    @* <footer class="border-top footer text-muted"> *@
-    @*     <div class="container"> *@
-    @*         &copy; 2025 - eduPortal_MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-    @*     </div> *@
-    @* </footer> *@
+
 
 
     <footer class="footer border-top py-4" style="background-color: #f8f9fc;">

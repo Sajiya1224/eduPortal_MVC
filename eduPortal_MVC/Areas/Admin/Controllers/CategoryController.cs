@@ -73,10 +73,18 @@ namespace eduPortalWeb.Areas.Admin.Controllers
 
     #region API CALLS
     [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int? take = null)
         {
-            List<Category> categoryObj = _unitOfWork.Category.GetAll().ToList();
-            return Json(new {data = categoryObj});
+            IEnumerable<Category> categoryObj = _unitOfWork.Category.GetAll();
+
+            if (take.HasValue)
+            {
+                categoryObj = categoryObj.Take(take.Value);
+            }
+
+            var data = categoryObj.ToList();
+            return Json(new { data });
+           
         }
 
 

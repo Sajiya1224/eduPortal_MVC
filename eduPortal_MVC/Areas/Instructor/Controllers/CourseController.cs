@@ -22,19 +22,20 @@ namespace eduPortal.Areas.Instructor.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVideoCourseService _videoCourseService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
         public CourseController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment,
-            IVideoCourseService videoCourseService, UserManager<IdentityUser> userManager)
+            IVideoCourseService videoCourseService, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _videoCourseService = videoCourseService;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
         }
+        [Authorize]
         public IActionResult Index()
         {
-            List<Course> courseObj = _unitOfWork.Course.GetAll().ToList();
-            return View(courseObj);
+            
+            return View();
         }
 
         [HttpGet]
@@ -125,6 +126,7 @@ namespace eduPortal.Areas.Instructor.Controllers
                     Price = courseEntity.Price,
                     ThumbnailUrl = courseEntity.ThumbnailUrl,
                     AddInfo = courseEntity.AddInfo,
+                    IsPublished = courseEntity.IsPublished,
                     Sections = courseEntity.Sections.Select(sec => new SectionDTO
                     {
                         Id = sec.Id,
@@ -201,10 +203,41 @@ namespace eduPortal.Areas.Instructor.Controllers
 
         #region API CALLS
         [HttpGet]
-        public IActionResult GetAll()
+        [Authorize]
+        public async Task<IActionResult> GetAll(int? take = null)
         {
-            List<Course> courseObj = _unitOfWork.Course.GetAll().ToList();
-            return Json(new { data = courseObj });
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            IEnumerable<Course> courseObj;
+
+            if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
+            {
+                // Admin: see all courses
+                courseObj = _unitOfWork.Course.GetAll();
+            }
+            else if (await _userManager.IsInRoleAsync(user, SD.Role_Instructor))
+            {
+                // Instructor: only their own courses
+                courseObj = _unitOfWork.Course.GetAll(c => c.ApplicationUserId == userId);
+            }
+            else
+            {
+                // Other roles (e.g. Learner) – adjust as you like
+                courseObj = Enumerable.Empty<Course>();
+            }
+          
+            if (take.HasValue)
+            {
+                courseObj = courseObj.Take(take.Value);
+            }
+
+            var data = courseObj.ToList();
+            return Json(new { data });
+
         }
 
 

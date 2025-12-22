@@ -2,6 +2,7 @@
 
 
 <form method="post">
+    <input type="hidden" asp-for="@Model.VCourseId"/>
     <div class="container mt-4">
 
         <!-- Course Header Section -->
@@ -194,6 +195,7 @@
     }
 }
 @section Scripts {
+
     <script>
         function playLecture(videoUrl)
         {

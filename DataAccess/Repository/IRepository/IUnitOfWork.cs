@@ -16,6 +16,8 @@ namespace eduPortal.DataAccess.Repository.IRepository
         ILectureRepository Lecture { get; }
         ICartRepository Cart { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IOrderHeaderRepository OrderHeader { get; }
+        IOrderDetailsRepository OrderDetails { get; }
         void Save();
     }
 }

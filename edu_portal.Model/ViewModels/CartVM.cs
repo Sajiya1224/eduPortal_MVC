@@ -8,6 +8,8 @@ namespace eduPortal.Models.ViewModels
 {
     public class CartVM
     {
+        public IEnumerable<Cart> cartList { get; set; }
+        public OrderHeader orderHeader { get; set; }
 
     }
 }

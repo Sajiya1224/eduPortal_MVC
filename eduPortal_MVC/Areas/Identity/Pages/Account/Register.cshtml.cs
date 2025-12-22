@@ -27,21 +27,21 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             IWebHostEnvironment webHostEnvironment,
             RoleManager<IdentityRole> roleManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -192,7 +192,7 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     using var cvfileStream = new FileStream(Path.Combine(cvPath, cvFileName), FileMode.Create) ;
                     await Input.CV.CopyToAsync(cvfileStream);
 
-                    user.CV = "/Teacher_Details/CV" + cvFileName;
+                    user.CV = "/Teacher_Details/CV/" + cvFileName;
                 }
 
                 if (Input.DemoVid != null)
@@ -203,12 +203,12 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     using var demoVidfileStream = new FileStream(Path.Combine(demoVidPath, demoVidFileName), FileMode.Create);
                     await Input.DemoVid.CopyToAsync(demoVidfileStream);
 
-                    user.DemoVid = "/Teacher_Details/TeachingDemoVid" + demoVidFileName;
+                    user.DemoVid = "/Teacher_Details/TeachingDemoVid/" + demoVidFileName;
                 }
 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+               
                 if (result.Succeeded)
                 {
                    
@@ -216,27 +216,54 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     if (!String.IsNullOrEmpty(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
+                        user.Role = Input.Role;           // set your column
+                        await _userManager.UpdateAsync(user);
 
                     }
                     else
                     {
                         await _userManager.AddToRoleAsync(user, SD.Role_Learner);
+                        user.Role = SD.Role_Learner;      // set your column
+                        await _userManager.UpdateAsync(user);
                     }
-                    
 
+                    // Check if user is an instructor
+                    var isInstructor = await _userManager.IsInRoleAsync(user, SD.Role_Instructor);
 
+                    // If instructor, they need approval - don't sign them in
+                    if (isInstructor)
+                    {
+                        // IsApproved is null by default (Pending)
+                        // Don't sign in, just show message and redirect to login
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        // Redirect to login with message
+                        TempData["InfoMessage"] = "Your instructor account is pending approval. Please wait for admin approval.";
+                        return RedirectToPage("/Account/Login");
+                    }
+
+                    // For non-instructors (Learners, Admins), proceed with normal registration flow
+                    var userIdNormal = await _userManager.GetUserIdAsync(user);
+                    var codeNormal = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    codeNormal = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codeNormal));
+                    var callbackUrlNormal = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = userIdNormal, code = codeNormal, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrlNormal)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -246,11 +273,7 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
 
-                        if (Input.Role == SD.Role_Instructor)
-                        {
-                            return LocalRedirect("/Instructor/Instructor/Dashboard");
-                        }
-                        else if (Input.Role == SD.Role_Learner)
+                        if (Input.Role == SD.Role_Learner)
                         {
                             return LocalRedirect("/Learner/Home/Index");
                         }
@@ -286,13 +309,13 @@ namespace eduPortalWeb.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

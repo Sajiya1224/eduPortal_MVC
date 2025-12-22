@@ -1,0 +1,19 @@
+﻿@model int
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center p-3 border-0 rounded shadow">
+
+        <i class="bi bi-check2-circle" style="color:#50C878;font-size:150px;"></i>
+
+        <h5 class="fw-bold">Payment Successful!</h5>
+        <p class="text-muted">
+            Thank you for your purchase. Your access has been activated. Start learning right away from your dashboard.
+        </p>
+
+        <div class="d-flex justify-content-center gap-4">
+            <a asp-controller="Home" asp-action="" class="btn btn-secondary btn-lg px-4 py-2 shadow-sm">Go To Learning</a>
+            <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-outline-secondary btn-lg px-4 py-2 shadow-sm">Browse More Course</a>
+        </div>
+
+    </div>
+</div>

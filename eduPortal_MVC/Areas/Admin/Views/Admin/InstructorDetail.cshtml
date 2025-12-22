@@ -1,0 +1,131 @@
+﻿@model ApplicationUser
+
+<div class="col-ms-6 m-5 text-end">
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn cat-btn text-decoration-none">Back to Dashboard</a>
+</div>
+
+@if (Model.Role == SD.Role_Instructor)
+{
+
+
+    <div class="container mt-5">
+        <div class="card shadow p-4" style=" width: 100%;">
+
+            <h4 class="mb-4 text-center fw-bold">Teacher Application Review</h4>
+
+            <form method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control border-0 shadow" disabled />
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control border-0 shadow" disabled />
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label"></label>
+                    <input asp-for="Gender" class="form-control border-0 shadow" disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth" class="form-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control border-0 shadow" disabled />
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="col-6">
+                        <label class="form-label">CV</label><br />
+                        <iframe src="@Model.CV" width="100%" height="300"></iframe>
+                        <a href="@Model.CV" target="_blank" rel="noopener">Open CV in new tab</a>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Teaching Demo</label><br />
+                        <video controls src="@Model.DemoVid" width="100%" height="300"></video>
+                    </div>
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                    <button formaction="@Url.Action("Approve","Admin",new { id = Model.Id })"
+                            class="btn btn-success px-4">
+                        <i class="bi bi-check2-circle"> Approve</i>
+                    </button>
+
+                    <button formaction="@Url.Action("Reject","Admin", new { id = Model.Id })"
+                            class="btn btn-danger px-4">
+                        <i class="bi bi-x-circle"> Reject</i>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+else
+{
+
+
+    <div class="container mt-5">
+        <div class="card shadow p-4" style=" width: 100%;">
+
+            <h4 class="mb-4 text-center fw-bold">All User Review</h4>
+
+            <form method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control border-0 shadow" disabled />
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control border-0 shadow" disabled />
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label"></label>
+                    <input asp-for="Gender" class="form-control border-0 shadow" disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth" class="form-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control border-0 shadow" disabled />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Role" class="form-label"></label>
+                    <input asp-for="Role" class="form-control border-0 shadow" disabled />
+                </div>
+
+              
+
+
+                <div class="d-flex justify-content-between">
+                   
+                    <button formaction="@Url.Action("Approve","Admin",new { id = Model.Id })"
+                            class="btn btn-success px-4">
+                        <i class="bi bi-check2-circle"> Approve</i>
+                    </button>
+
+                    <button formaction="@Url.Action("Reject","Admin", new { id = Model.Id })"
+                            class="btn btn-danger px-4">
+                        <i class="bi bi-x-circle"> Reject</i>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+
+

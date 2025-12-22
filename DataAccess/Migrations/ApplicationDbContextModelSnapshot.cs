@@ -241,6 +241,9 @@ namespace eduPortal.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("VCourseId")
                         .HasColumnType("int");
 
@@ -277,19 +280,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6927),
+                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9709),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6929),
+                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9713),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 4, 6, 59, 27, 925, DateTimeKind.Utc).AddTicks(6930),
+                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9716),
                             Name = "Networking"
                         });
                 });
@@ -377,6 +380,69 @@ namespace eduPortal.DataAccess.Migrations
                     b.ToTable("lecture");
                 });
 
+            modelBuilder.Entity("eduPortal.Models.OrderDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderHeaderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("VCourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderHeaderId");
+
+                    b.HasIndex("VCourseId");
+
+                    b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.OrderHeader", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("OrderTotal")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntendId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("OrderHeader");
+                });
+
             modelBuilder.Entity("eduPortal.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -461,6 +527,9 @@ namespace eduPortal.DataAccess.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -607,6 +676,36 @@ namespace eduPortal.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.OrderDetails", b =>
+                {
+                    b.HasOne("eduPortal.Models.OrderHeader", "OrderHeader")
+                        .WithMany()
+                        .HasForeignKey("OrderHeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eduPortal.Models.VideoCourse", "VCourse")
+                        .WithMany()
+                        .HasForeignKey("VCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderHeader");
+
+                    b.Navigation("VCourse");
+                });
+
+            modelBuilder.Entity("eduPortal.Models.OrderHeader", b =>
+                {
+                    b.HasOne("eduPortal.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUsers");
                 });
 
             modelBuilder.Entity("eduPortal.Models.Question", b =>

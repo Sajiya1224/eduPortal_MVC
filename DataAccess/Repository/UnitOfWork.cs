@@ -21,15 +21,20 @@ namespace eduPortal.DataAccess.Repository
         public ILectureRepository Lecture { get; private set; }
         public ICartRepository Cart { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+        public IOrderDetailsRepository OrderDetails { get; private set; }
         public UnitOfWork(ApplicationDbContext db) 
         {
 
             _db = db;
             Category = new CategoryRepository(_db);
             Course = new CourseRepository(_db);
+            VideoCourse = new VideoCourseRepository(_db);
             Section = new SectionRepository(_db);
             Lecture = new LectureRepository(_db);
             Cart = new CartRepository(_db);
+            OrderDetails = new OrderDetailsRepository(_db);
+            OrderHeader = new OrderHeaderRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
 
         }

@@ -3,7 +3,9 @@ using System.Security.Claims;
 using eduPortal.DataAccess.Repository.IRepository;
 using eduPortal.Models;
 using eduPortal.Models.ViewModels;
+using eduPortal.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 
@@ -15,13 +17,15 @@ namespace eduPortal.Areas.Learner.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             var categoryList = _unitOfWork.Category.GetAll();
@@ -33,11 +37,14 @@ namespace eduPortal.Areas.Learner.Controllers
             };
             return View(vmObj);
         }
-
-        public IActionResult BrowseCourse( int courseId)
+        [HttpGet]
+        public IActionResult BrowseCourse( int? categoryId)
         { 
             var categoryList = _unitOfWork.Category.GetAll();
-            var courses = _unitOfWork.Course.GetAll(includeproperties: "Category").OfType<VideoCourse>().ToList();
+            var courses = _unitOfWork.Course.GetAll(includeproperties: "Category")
+                .OfType<VideoCourse>()
+                 .Where(u => categoryId == null || u.CategoryId == categoryId)
+                 .ToList();
             BrowseCourseVM vmObj = new BrowseCourseVM
             {
                 CategoryList = categoryList,
@@ -46,6 +53,26 @@ namespace eduPortal.Areas.Learner.Controllers
             };
             return View(vmObj);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Enrollement(int? categoryId)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var UserId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var learnerUser = await _userManager.FindByIdAsync(UserId);
+
+            IEnumerable<OrderDetails> orderDetailObj = _unitOfWork.OrderDetails
+                .GetAll(u => u.OrderHeader.ApplicationUserId == UserId,
+                includeproperties: "OrderHeader,OrderHeader.ApplicationUsers, VCourse, VCourse.ApplicationUser, VCourse.Category").ToList();
+
+            int enrolledCoursesCount = orderDetailObj.Count();
+
+            ViewBag.LearnerName = learnerUser?.Name ?? "Unknown Learner";
+            ViewBag.EnrolledCoursesCount = enrolledCoursesCount;
+            return View(orderDetailObj ?? Enumerable.Empty<OrderDetails>());
+        }
+
+
         [HttpGet]
         public IActionResult Details(int VideoCourseId)
         {
@@ -86,6 +113,7 @@ namespace eduPortal.Areas.Learner.Controllers
             ViewBag.InstructorCourseCount = instructorCourseCount;
             return View(cart);
         }
+
       
         [HttpPost]
         [Authorize]
@@ -96,10 +124,22 @@ namespace eduPortal.Areas.Learner.Controllers
 
             cart.ApplicationUserId = userId;
 
-            _unitOfWork.Cart.Add(cart);
+            Cart cartFromDb = _unitOfWork.Cart.Get(u => u.ApplicationUserId == userId && u.VCourseId == cart.VCourseId);
+            if (cartFromDb != null)
+            {
+                // cart already have something
+                TempData["error"] = "You already added this course to cart.";
+                return RedirectToAction("BrowseCourse");
+            }
+            else
+            {
+                // no cart so need to add one
+                _unitOfWork.Cart.Add(cart);
+            }
+            
             _unitOfWork.Save();
-
-            return RedirectToAction(nameof(Index));
+            TempData["success"] = "Course added to cart.";
+            return RedirectToAction(nameof(BrowseCourse));
         }
 
 
@@ -122,5 +162,11 @@ namespace eduPortal.Areas.Learner.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
+
+
+
+

@@ -166,10 +166,17 @@
 			</div>
 		</div>
 
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" asp-for="VideoCourseVm.IsPublished">
+			<label class="form-check-label" asp-for="VideoCourseVm.IsPublished">published ?</label>
+			<span asp-validation-for="VideoCourseVm.IsPublished" class="text-danger"></span>
+		</div>
+
 		<div class="col-ms-12 m-2 text-end">
 			<a asp-controller="Course" asp-action="Index" class="btn cat-btn text-decoration-none">Cancel</a>
 			<button type="submit" class="btn btn-dark text-decoration-none">@(Model.VideoCourseVm.Id.GetValueOrDefault() > 0 ? "Update" : "Create")</button>
 		</div>
+
 	</form>
 
 	<!-- Hidden templates for cloning -->
