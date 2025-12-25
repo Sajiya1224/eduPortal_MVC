@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eduPortal.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class addingAllMigrationUptoEnroll : Migration
+    public partial class AllMigrationFromStarting : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,7 @@ namespace eduPortal.DataAccess.Migrations
                     CV = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DemoVid = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -182,6 +183,31 @@ namespace eduPortal.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderHeader",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderTotal = table.Column<double>(type: "float", nullable: false),
+                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SessionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentIntendId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderHeader", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderHeader_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "courses",
                 columns: table => new
                 {
@@ -193,6 +219,9 @@ namespace eduPortal.DataAccess.Migrations
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AddInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    courseContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     TotalQuestions = table.Column<int>(type: "int", nullable: true),
                     TotalMarks = table.Column<int>(type: "int", nullable: true),
@@ -205,9 +234,69 @@ namespace eduPortal.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_courses", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_courses_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_courses_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VCourseId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cart_courses_VCourseId",
+                        column: x => x.VCourseId,
+                        principalTable: "courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderHeaderId = table.Column<int>(type: "int", nullable: false),
+                    VCourseId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_OrderHeader_OrderHeaderId",
+                        column: x => x.OrderHeaderId,
+                        principalTable: "OrderHeader",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_courses_VCourseId",
+                        column: x => x.VCourseId,
+                        principalTable: "courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -283,9 +372,9 @@ namespace eduPortal.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 11, 30, 9, 30, 36, 737, DateTimeKind.Utc).AddTicks(2555), "Database" },
-                    { 2, new DateTime(2025, 11, 30, 9, 30, 36, 737, DateTimeKind.Utc).AddTicks(2557), "ASP.net" },
-                    { 3, new DateTime(2025, 11, 30, 9, 30, 36, 737, DateTimeKind.Utc).AddTicks(2558), "Networking" }
+                    { 1, new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8567), "Database" },
+                    { 2, new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8573), "ASP.net" },
+                    { 3, new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8576), "Networking" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -328,6 +417,21 @@ namespace eduPortal.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cart_ApplicationUserId",
+                table: "Cart",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_VCourseId",
+                table: "Cart",
+                column: "VCourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_courses_ApplicationUserId",
+                table: "courses",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_courses_CategoryId",
                 table: "courses",
                 column: "CategoryId");
@@ -336,6 +440,21 @@ namespace eduPortal.DataAccess.Migrations
                 name: "IX_lecture_SectionId",
                 table: "lecture",
                 column: "SectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderHeaderId",
+                table: "OrderDetails",
+                column: "OrderHeaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_VCourseId",
+                table: "OrderDetails",
+                column: "VCourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderHeader_ApplicationUserId",
+                table: "OrderHeader",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_QuizCourseId",
@@ -367,7 +486,13 @@ namespace eduPortal.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Cart");
+
+            migrationBuilder.DropTable(
                 name: "lecture");
+
+            migrationBuilder.DropTable(
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
                 name: "Question");
@@ -376,13 +501,16 @@ namespace eduPortal.DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "section");
 
             migrationBuilder.DropTable(
+                name: "OrderHeader");
+
+            migrationBuilder.DropTable(
                 name: "courses");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Category");

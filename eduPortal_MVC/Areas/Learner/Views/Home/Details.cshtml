@@ -7,13 +7,13 @@
 
         <!-- Course Header Section -->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-8 text-black">
 
                 <p class="badge bg-success">@Model.VCourse.Category.Name</p>
 
-                <h1 class="fw-bold"> @Model.VCourse.Title</h1>
+                <h1 class="fw-bold custom-color-medium"> @Model.VCourse.Title</h1>
 
-                <p class="text-muted fs-5">
+                <p class="text-black fs-5">
                     @Html.Raw(Model.VCourse.Description)
                 </p>
 
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Right Side Pricing Box -->
-            <div class="col-lg-4">
+            <div class="col-lg-4 text-black">
                 <div class="card shadow-sm p-3 sticky-top" style="top: 100px;">
 
                     <img src="@Model.VCourse.ThumbnailUrl"
@@ -55,12 +55,12 @@
                     <h3 class="fw-bold mt-2">$@Model.VCourse.Price</h3>
 
                     <button type="submit"
-                       class="btn btn-dark w-100 mt-3">
+                       class="btn btn-custom w-100 mt-3">
                         Add To Cart
                     </button>
 
                     <a asp-controller="" asp-action="" asp-route-id=""
-                       class="btn btn-outline-dark w-100 mt-2">
+                       class="btn btn-custom-outline w-100 mt-2">
                         Buy Now
                     </a>
 
@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <div class="container mt-4">
+    <div class="container mt-4 text-dark">
 
         <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
             <li class="nav-item">

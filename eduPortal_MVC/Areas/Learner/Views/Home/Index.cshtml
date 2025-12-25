@@ -5,7 +5,7 @@
 
 <!-- Hero Section -->
 <div class="mt-0 hero-section d-flex align-items-center justify-content-between flex-column flex-md-row w-100 py-5"
-style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
+     style="background: linear-gradient(to bottom, #BDE8F5, #ffffff);">
 
     <!-- Left Content -->
     <div class="container-fluid px-5 px-md-5">
@@ -19,8 +19,10 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
                     Build skills with courses, certificates, and degrees online from expert instructors.
                 </p>
                 <div class="d-flex justify-content-center justify-content-md-start gap-3">
-                    <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="btn btn-secondary btn-lg px-4 py-2 shadow-sm">Browse Courses</a>
-                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-Role="Instructor" class="btn btn-outline-secondary btn-lg px-4 py-2">Become an Instructor</a>
+                    <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" 
+                        class="btn btn-secondary btn-lg px-4 py-2 shadow-sm btn-custom">Browse Courses</a>
+                    <a asp-area="Identity" asp-page="/Account/Register" asp-route-Role="Instructor" 
+                        class="btn btn-custom-outline btn-lg px-4 py-2">Become an Instructor</a>
 
                 </div>
             </div>
@@ -55,7 +57,7 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
 
 <div class="p-2 bg-light">
     <div class="container my-5">
-        <h2 class="mb-3 text-center">Browse by Category</h2>
+        <h2 class="mb-3 text-center custom-color-medium">Browse by Category</h2>
         <h5 class="mb-5 text-center text-muted">Explore our most popular course categories</h5>
 
         <div class="row g-4">
@@ -84,7 +86,7 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
 
 <div class="p-2">
     <div class="container my-5">
-        <h2 class="mb-3 text-center">Featured Courses</h2>
+        <h2 class="mb-3 text-center custom-color-medium">Featured Courses</h2>
         <h5 class="mb-5 text-center text-muted">Hand-picked courses to help you get started</h5>
 
         <div class="text-center mt-4">
@@ -140,7 +142,7 @@ style="background: linear-gradient(to bottom, rgba(200,200,200,0.7), #ffffff);">
 
 <!-- Become an Instructor -->
 
-    <div class="mb-0 py-5" style="background-color: #0b0b1d; color: white;">
+    <div class="mb-0 py-5 custom-bgcolor-dark text-white">
         <div class="container text-center">
 
            

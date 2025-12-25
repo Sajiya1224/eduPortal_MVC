@@ -1,7 +1,7 @@
 ﻿@model CartVM
 
 <form method="post">
-    <div class="container cart-container mt-5">
+    <div class="container cart-container mt-5  custom-color-medium">
         <div class="row">
             @if (Model.cartList.Count() == null || Model.cartList.Count() == 0)
             {
@@ -10,11 +10,11 @@
                     <div class="text-center ms-5">
                         <p class="text-muted">
                             
-                            <i class="bi bi-cart" style="font-size:180px"></i><br />
+                            <i class="bi bi-cart custom-color-dark" style="font-size:180px"></i><br />
                             <b class="text-dark">Your Cart Is Empty</b><br />
                             The right course is waiting—explore until you find it.
                         </p>
-                        <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-dark btn-lg px-4 py-2 shadow-sm">Keep Searching </a>
+                        <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-custom btn-lg px-4 py-2 shadow-sm">Keep Searching </a>
                     </div>
                 </div>
 

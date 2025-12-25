@@ -13,10 +13,10 @@ function LoadInstructorDataTable() {
             "ajax": { url: '/admin/admin/getInstructor' },
             "columns": [
                 { data: 'name', width: "25%" },
-                { data: 'email', width: "15%" },
+                { data: 'email', width: "25%" },
                 { data: 'gender', width: "10%" },
-                { data: 'cv', width: "10%" },
-                { data: 'demoVid', width: "10%" },
+                { data: 'cv', width: "15%" },
+                { data: 'demoVid', width: "15%" },
                 {
                     data: 'id',
                     render: function (data) {
@@ -26,7 +26,7 @@ function LoadInstructorDataTable() {
                                     </a>
                                 </div>`;
                     },
-                    width: "40%"
+                    width: "10%"
                 }
             ]
         });
@@ -39,8 +39,8 @@ function LoadInstructorDataTable() {
             columns: [
                 { data: 'name', width: "25%" },
                 { data: 'email', width: "15%" },
-                { data: 'gender', width: "10%" },
-                { data: 'role', width: "10%" },
+                { data: 'gender', width: "15%" },
+                { data: 'role', width: "15%" },
                 {
                     data: 'id',
                     render: function (data) {
@@ -52,7 +52,7 @@ function LoadInstructorDataTable() {
                                 </a>
                             </div>`;
                     },
-                    width: "40%"
+                    width: "10%"
                 }
             ]
         });

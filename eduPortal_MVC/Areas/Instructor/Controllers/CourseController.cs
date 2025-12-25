@@ -16,7 +16,7 @@ using System.Security.Claims;
 namespace eduPortal.Areas.Instructor.Controllers
 {
     [Area("Instructor")]
-    [Authorize(Roles = SD.Role_Instructor)]
+    [Authorize(Policy = "AdminOrInstructor")]
     public class CourseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +31,6 @@ namespace eduPortal.Areas.Instructor.Controllers
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
         }
-        [Authorize]
         public IActionResult Index()
         {
             
@@ -72,9 +71,13 @@ namespace eduPortal.Areas.Instructor.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        [Authorize(Roles = SD.Role_Instructor)]
-        public IActionResult UpsertVideo(int? id)
+        
+        public async Task<IActionResult> UpsertVideo(int? id)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var user = await _userManager.FindByIdAsync(userId);
 
             VideoCourseVM vm = new VideoCourseVM
             {
@@ -141,6 +144,8 @@ namespace eduPortal.Areas.Instructor.Controllers
 
                     }).ToList()
                 };
+
+                ViewBag.User = user.Role;
                 return View(vm);
             }
            
@@ -234,7 +239,7 @@ namespace eduPortal.Areas.Instructor.Controllers
             {
                 courseObj = courseObj.Take(take.Value);
             }
-
+            ViewBag.User = user.Role;
             var data = courseObj.ToList();
             return Json(new { data });
 

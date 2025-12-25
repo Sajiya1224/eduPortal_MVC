@@ -38,6 +38,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOrInstructor", policy =>
+        policy.RequireRole("Admin", "Instructor"));
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -62,6 +67,7 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",

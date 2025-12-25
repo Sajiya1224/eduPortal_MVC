@@ -280,19 +280,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9709),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8567),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9713),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8573),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 22, 9, 26, 38, 196, DateTimeKind.Utc).AddTicks(9716),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8576),
                             Name = "Networking"
                         });
                 });

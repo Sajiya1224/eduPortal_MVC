@@ -3,9 +3,9 @@
     int enrolledCount = ViewBag.EnrolledCoursesCount is int c ? c : 0;
 }
 
-<div class="container">
+<div class="container custom-color-dark">
     <h4 class="fw-semibold mt-4">My Learning</h4>
-    <p class="text-muted mb-0">Welcome, <strong>@(ViewBag.LearnerName ?? "Learner") </strong></p><br/>
+    <p class="custom-color-medium mb-0">Welcome, <strong>@(ViewBag.LearnerName ?? "Learner") </strong></p><br/>
     <p class="fw-bold mb-0">Total course Enrolled : @(ViewBag.EnrolledCoursesCount ?? 0) </p>
     <div class="row">
         <div class="col-9">
@@ -44,8 +44,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-end">
-                                    <a class="btn btn-outline-dark">View</a>
-                                    <a class="btn btn-dark">Edit</a>
+                                    <a asp-controller="Home"
+                                       asp-action="Details"
+                                       asp-route-VideoCourseId="@obj.Id"
+                                       class="btn btn-outline-dark">View</a>
+                                    
                                 </div>
                             </div>
                         </div>

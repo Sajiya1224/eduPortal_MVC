@@ -12,9 +12,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-0">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0 custom-bgcolor-light">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="Learner" asp-controller="Home" asp-action="Index" style="font-size: 29px;"><i class="bi bi-journal-bookmark"></i> LearnX</a>
+                <a class="navbar-brand custom-color-medium" asp-area="Learner" asp-controller="Home" asp-action="Index" style="font-size: 29px;"><i class="bi bi-journal-bookmark custom-color-medium"></i> LearnX</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,10 +24,10 @@
                         @if(User.IsInRole(SD.Role_Instructor))
                         {
                             <li class="nav-item p-2">
-                                <a class="nav-link text-dark " asp-area="Instructor" asp-controller="Instructor" asp-action="Dashboard">Instructor Dashboard</a>
+                                <a class="nav-link custom-color-dark" asp-area="Instructor" asp-controller="Instructor" asp-action="Dashboard">Instructor Dashboard</a>
                             </li>
                             <li class="nav-item p-2">
-                                <a class="nav-link text-light btn btn-dark btn-lg px-4 py-2 shadow-sm" asp-area="Instructor" asp-controller="Course" asp-action="CourseType"><i class="bi bi-plus-circle"></i> Create Course</a>
+                                <a class="nav-link text-light btn btn-custom btn-lg px-4 py-2 shadow-sm" asp-area="Instructor" asp-controller="Course" asp-action="CourseType"><i class="bi bi-plus-circle"></i> Create Course</a>
                             </li>
                         }
 
@@ -39,17 +39,17 @@
                                        placeholder="Search User and courses..."
                                        aria-label="Search">
                             </form>
-                            <a class="nav-link p-2" text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
+                            <a class="nav-link custom-color-dark" text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
                             
                         }
 
                         @if(User.IsInRole(SD.Role_Learner))
                         {
                             <li class="nav-item p-2 me-auto">
-                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link custom-color-dark" asp-area="Learner" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item p-2 me-auto">
-                                <a class="nav-link text-dark " asp-area="Learner" asp-controller="Cart" asp-action="Index"><i class="bi bi-cart"></i>&nbsp;</a>
+                                <a class="nav-link custom-color-dark " asp-area="Learner" asp-controller="Cart" asp-action="Index"><i class="bi bi-cart"></i>&nbsp;</a>
                             </li>
 
                             <form class="d-flex mx-auto custom-search p-2">
@@ -62,13 +62,13 @@
 
 
                             <li class="nav-item p-2 ms-auto">
-                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse">Courses</a>
+                                <a class="nav-link custom-color-dark" asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse">Courses</a>
                             </li>
                             <li class="nav-item p-2 ms-auto">
-                                <a class="nav-link text-dark" asp-area="Learner" asp-controller="Home" asp-action="Enrollement">My Enrollement</a>
+                                <a class="nav-link custom-color-dark" asp-area="Learner" asp-controller="Home" asp-action="Enrollement">My Enrollement</a>
                             </li>
                             <li class="nav-item p-2 ms-auto">
-                                <a class="nav-link text-dark" asp-area="Identity"  asp-page="/Account/Register" asp-route-role="Instructor">Become an Instructor</a>
+                                <a class="nav-link custom-color-dark" asp-area="Identity" asp-page="/Account/Register" asp-route-role="Instructor">Become an Instructor</a>
                             </li>
 
                         } 
@@ -79,7 +79,7 @@
             </div>
         </nav>
     </header>
-    <div class="w-full m-0 p-0">
+    <div class="w-full m-0 p-0" style="color:#BDE8F5;">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
             @RenderBody()
@@ -89,8 +89,8 @@
 
 
 
-    <footer class="footer border-top py-4" style="background-color: #f8f9fc;">
-        <div class="container">
+    <footer class="footer border-top py-4 mb-0 custom-color-dark">
+        <div class="container ">
 
             <div class="row">
 
@@ -105,7 +105,7 @@
                 </div>
 
                 <!-- Company Section -->
-                <div class="col-md-3 mb-4">
+                <div class="col-md-3 mb-4 ">
                     <h5 class="fw-semibold mb-3">Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" class="text-muted text-decoration-none">Browse Course</a></li>

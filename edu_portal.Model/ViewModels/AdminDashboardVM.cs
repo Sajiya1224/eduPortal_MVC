@@ -13,6 +13,7 @@ namespace eduPortal.Models.ViewModels
         public int TotalEnrollmentsCount { get; set; }
         public double TotalRevenue { get; set; }
         public double ActiveInstructor { get; set; }
+        public double ActiveStudents{ get; set; }
         public double PublishedCourses { get; set; }
 
      

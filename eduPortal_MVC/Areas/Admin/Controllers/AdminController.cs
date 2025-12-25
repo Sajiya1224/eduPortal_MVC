@@ -71,6 +71,7 @@ namespace eduPortalWeb.Areas.Admin.Controllers
                 TotalEnrollmentsCount = totalEnrollments,
                 TotalRevenue = totalRevenue,
                 ActiveInstructor = activeInstructors,
+                ActiveStudents = activeStudents,
                 PublishedCourses = publishedCourses
             };
 
@@ -79,6 +80,84 @@ namespace eduPortalWeb.Areas.Admin.Controllers
             return View(adminDashboardVM);
         }
 
+
+        [HttpGet]
+
+        public async Task<IActionResult> UserDetails(int? id)
+        {
+
+            VideoCourseVM vm = new VideoCourseVM
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                VideoCourseVm = new VideoCourseDTO
+                {
+                    Sections = new List<SectionDTO>()
+                    {
+                    new SectionDTO
+                    {
+                        SectionTitle ="",
+                        Lectures = new List<LectureDTO>
+                        {
+                            new LectureDTO{LectureTitle="", VideoUrl=""}
+                        }
+                    }
+                    }
+                }
+            };
+
+            if (id == null || id == 0)
+            {
+                // create
+                return View(vm);
+            }
+            else
+            {
+                // update
+
+                var courseEntity = _unitOfWork.Course.Get(u => u.Id == id && u is VideoCourse,
+                    "Category,Sections,Sections.Lectures") as VideoCourse;
+
+                if (courseEntity == null)
+                {
+                    return NotFound();
+                }
+
+                vm.VideoCourseVm = new VideoCourseDTO
+                {
+                    Id = courseEntity.Id,
+                    Title = courseEntity.Title,
+                    Description = courseEntity.Description,
+                    Duration = courseEntity.Duration,
+                    Level = courseEntity.Level,
+                    CategoryId = courseEntity.CategoryId,
+                    Price = courseEntity.Price,
+                    ThumbnailUrl = courseEntity.ThumbnailUrl,
+                    AddInfo = courseEntity.AddInfo,
+                    IsPublished = courseEntity.IsPublished,
+                    Sections = courseEntity.Sections.Select(sec => new SectionDTO
+                    {
+                        Id = sec.Id,
+                        SectionTitle = sec.SectionTitle,
+                        Lectures = sec.Lectures.Select(lec => new LectureDTO
+                        {
+                            Id = lec.Id,
+                            LectureTitle = lec.LectureTitle,
+                            VideoUrl = lec.VideoUrl
+                        }
+                        ).ToList()
+
+                    }).ToList()
+                };
+
+                
+                return View(vm);
+            }
+
+        }
         public IActionResult InstructorData()
         {
             List<ApplicationUser> userObj = _unitOfWork.ApplicationUser.GetAll().ToList();
@@ -105,6 +184,7 @@ namespace eduPortalWeb.Areas.Admin.Controllers
             //List<ApplicationUser> userObj = _unitOfWork.ApplicationUser.GetAll().ToList();
             return View();
         }
+
         public IActionResult CourseDetail()
         {
             List<Course> courseObj = _unitOfWork.Course.GetAll().ToList();

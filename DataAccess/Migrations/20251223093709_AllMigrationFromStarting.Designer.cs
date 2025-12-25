@@ -12,8 +12,8 @@ using eduPortal.DataAccess.dataContext;
 namespace eduPortal.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251219092003_makingIsApprovedNullable")]
-    partial class makingIsApprovedNullable
+    [Migration("20251223093709_AllMigrationFromStarting")]
+    partial class AllMigrationFromStarting
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,19 +283,19 @@ namespace eduPortal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 19, 9, 20, 2, 829, DateTimeKind.Utc).AddTicks(8418),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8567),
                             Name = "Database"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 19, 9, 20, 2, 829, DateTimeKind.Utc).AddTicks(8420),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8573),
                             Name = "ASP.net"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 19, 9, 20, 2, 829, DateTimeKind.Utc).AddTicks(8421),
+                            CreatedAt = new DateTime(2025, 12, 23, 9, 37, 7, 226, DateTimeKind.Utc).AddTicks(8576),
                             Name = "Networking"
                         });
                 });
