@@ -5,9 +5,12 @@ using eduPortal.Models;
 using eduPortal.Models.ViewModels;
 using eduPortal.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using System.IO;
+using System.Linq;
 
 namespace eduPortal.Areas.Learner.Controllers
 {
@@ -18,12 +21,14 @@ namespace eduPortal.Areas.Learner.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
         }
         [HttpGet]
         public IActionResult Index()
@@ -110,7 +115,24 @@ namespace eduPortal.Areas.Learner.Controllers
                 ApplicationUsers = AUser
             };
 
+            // Check if user is enrolled in this course
+            bool isEnrolled = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    isEnrolled = _unitOfWork.OrderDetails.GetAll(
+                        od => od.OrderHeader.ApplicationUserId == userId && 
+                              od.VCourseId == VideoCourseId
+                    ).Any();
+                }
+            }
+
             ViewBag.InstructorCourseCount = instructorCourseCount;
+            ViewBag.IsEnrolled = isEnrolled;
             return View(cart);
         }
 
@@ -140,6 +162,67 @@ namespace eduPortal.Areas.Learner.Controllers
             _unitOfWork.Save();
             TempData["success"] = "Course added to cart.";
             return RedirectToAction(nameof(BrowseCourse));
+        }
+
+        [HttpGet]
+        public IActionResult PlayVideo(int lectureId)
+        {
+            // Get the lecture with course information
+            var lecture = _unitOfWork.Lecture.Get(
+                l => l.Id == lectureId,
+                includeproperties: "Section,Section.VideoCourse"
+            );
+            
+            if (lecture == null || lecture.Section?.VideoCourse == null)
+            {
+                return NotFound();
+            }
+            
+            // Check if user is authenticated and enrolled
+            if (User.Identity.IsAuthenticated)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    // Check if user has purchased this course
+                    var hasAccess = _unitOfWork.OrderDetails.GetAll(
+                        od => od.OrderHeader.ApplicationUserId == userId && 
+                              od.VCourseId == lecture.Section.VideoCourse.Id
+                    ).Any();
+                    
+                    if (!hasAccess)
+                    {
+                        return Forbid("You need to enroll in this course to access the video.");
+                    }
+                }
+            }
+            else
+            {
+                // Not authenticated - redirect to login
+                return Challenge();
+            }
+            
+            // Check if video URL exists
+            if (string.IsNullOrEmpty(lecture.VideoUrl))
+            {
+                return NotFound("Video not found.");
+            }
+            
+            // Build the full file path
+            var filePath = Path.Combine(
+                _webHostEnvironment.WebRootPath, 
+                lecture.VideoUrl.TrimStart('\\', '/')
+            );
+            
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Video file not found on server.");
+            }
+            
+            // Return the video with range support for streaming
+            return PhysicalFile(filePath, "video/mp4", enableRangeProcessing: true);
         }
 
 

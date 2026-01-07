@@ -19,7 +19,7 @@
                             <b class="text-dark">No Enrollement Yet !!</b><br />
                             The right course is waiting—explore until you find it.
                         </p>
-                        <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-dark btn-lg px-4 py-2 shadow-sm">Keep Searching </a>
+                        <a asp-controller="Home" asp-action="BrowseCourse" class="btn btn-custom btn-lg px-4 py-2 shadow-sm">Keep Searching </a>
                     </div>
                 </div>
             }
@@ -46,7 +46,7 @@
                                 <div class="col-md-4 text-end">
                                     <a asp-controller="Home"
                                        asp-action="Details"
-                                       asp-route-VideoCourseId="@obj.Id"
+                                       asp-route-VideoCourseId="@obj.VCourse.Id"
                                        class="btn btn-outline-dark">View</a>
                                     
                                 </div>
@@ -110,8 +110,8 @@
 
         </div>
         <div class="col-lg-3">
-            <div class="card mt-3 p-3 shadow-sm">
-                <div class="d-flex align-items-center gap-3 mt-2">
+            <div class="card mt-3 p-3 shadow-sm custom-color-dark">
+                <div class="d-flex align-items-center gap-3 mt-2 ">
                     <div>
 
                         <h6 class="mb-0 fw-bold">Quick Actions</h6>
@@ -123,17 +123,17 @@
 
                     <div class="p-2">
                         <a asp-area="Learner" asp-controller="Home" asp-action="Index"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-house-fill" style="font-size:20px;"></i>  Home Page</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-house-fill" style="font-size:20px;"></i>  Home Page</a>
                     </div>
 
                     <div class="p-2">
                         <a asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse"
-                           class="btn btn-outline-dark  p-2" style="width:100%"><i class="bi bi-book" style="font-size:20px;"></i>  Browse Courses</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-book" style="font-size:20px;"></i>  Browse Courses</a>
                     </div>
 
                     <div class="p-2">
                         <a asp-area="Learner" asp-controller="Cart" asp-action="Index"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-cart-fill" style="font-size:20px;"></i>  Visit Cart</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-cart-fill" style="font-size:20px;"></i>  Visit Cart</a>
                     </div>
 
                 </div>

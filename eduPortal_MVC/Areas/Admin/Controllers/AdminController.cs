@@ -81,83 +81,45 @@ namespace eduPortalWeb.Areas.Admin.Controllers
         }
 
 
+
         [HttpGet]
-
-        public async Task<IActionResult> UserDetails(int? id)
+        [Authorize]
+        public IActionResult Search(string searchTerm)
         {
-
-            VideoCourseVM vm = new VideoCourseVM
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }),
-                VideoCourseVm = new VideoCourseDTO
-                {
-                    Sections = new List<SectionDTO>()
-                    {
-                    new SectionDTO
-                    {
-                        SectionTitle ="",
-                        Lectures = new List<LectureDTO>
-                        {
-                            new LectureDTO{LectureTitle="", VideoUrl=""}
-                        }
-                    }
-                    }
-                }
-            };
-
-            if (id == null || id == 0)
-            {
-                // create
-                return View(vm);
-            }
-            else
-            {
-                // update
-
-                var courseEntity = _unitOfWork.Course.Get(u => u.Id == id && u is VideoCourse,
-                    "Category,Sections,Sections.Lectures") as VideoCourse;
-
-                if (courseEntity == null)
-                {
-                    return NotFound();
-                }
-
-                vm.VideoCourseVm = new VideoCourseDTO
-                {
-                    Id = courseEntity.Id,
-                    Title = courseEntity.Title,
-                    Description = courseEntity.Description,
-                    Duration = courseEntity.Duration,
-                    Level = courseEntity.Level,
-                    CategoryId = courseEntity.CategoryId,
-                    Price = courseEntity.Price,
-                    ThumbnailUrl = courseEntity.ThumbnailUrl,
-                    AddInfo = courseEntity.AddInfo,
-                    IsPublished = courseEntity.IsPublished,
-                    Sections = courseEntity.Sections.Select(sec => new SectionDTO
-                    {
-                        Id = sec.Id,
-                        SectionTitle = sec.SectionTitle,
-                        Lectures = sec.Lectures.Select(lec => new LectureDTO
-                        {
-                            Id = lec.Id,
-                            LectureTitle = lec.LectureTitle,
-                            VideoUrl = lec.VideoUrl
-                        }
-                        ).ToList()
-
-                    }).ToList()
-                };
-
-                
-                return View(vm);
+                return RedirectToAction(nameof(Index));
             }
 
+            // Search in courses
+            var courses = _unitOfWork.Course.GetAll(
+                includeproperties: "Category,ApplicationUser"
+            )
+            .OfType<VideoCourse>()
+            .Where(c =>
+                c.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                c.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                c.Category.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                (c.ApplicationUser != null && c.ApplicationUser.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            )
+            .ToList();
+
+            // Search in users (if needed)
+            var users = _unitOfWork.ApplicationUser.GetAll()
+                .Where(u =>
+                    u.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    u.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
+
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.Courses = courses;
+            ViewBag.Users = users;
+
+            return View();
         }
+
+
         public IActionResult InstructorData()
         {
             List<ApplicationUser> userObj = _unitOfWork.ApplicationUser.GetAll().ToList();
@@ -241,7 +203,7 @@ namespace eduPortalWeb.Areas.Admin.Controllers
 
             }
            
-            return RedirectToAction("InstructorData");
+            return RedirectToAction("Dashboard");
         }
 
         [HttpPost]
@@ -279,7 +241,7 @@ namespace eduPortalWeb.Areas.Admin.Controllers
                 TempData["error"] = "Failed to reject instructor";
 
             }
-            return RedirectToAction("InstructorData");
+            return RedirectToAction("Dashboard");
         }
 
 

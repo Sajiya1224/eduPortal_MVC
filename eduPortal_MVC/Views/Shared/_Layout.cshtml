@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0 custom-bgcolor-light">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom-1 box-shadow mb-0 custom-bgcolor-light">
             <div class="container-fluid">
                 <a class="navbar-brand custom-color-medium" asp-area="Learner" asp-controller="Home" asp-action="Index" style="font-size: 29px;"><i class="bi bi-journal-bookmark custom-color-medium"></i> LearnX</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,13 +33,16 @@
 
                         @if (User.IsInRole(SD.Role_Admin))
                         {
-                            <form class="d-flex mx-auto custom-search">
+                            <form class="d-flex mx-auto custom-search" method="get" asp-area="Admin" asp-controller="Admin" asp-action="Search">
                                 <input class="form-control rounded-pill search-input"
                                        type="search"
+                                       name="searchTerm"
                                        placeholder="Search User and courses..."
-                                       aria-label="Search">
+                                       aria-label="Search"
+                                       value="@ViewBag.SearchTerm">
                             </form>
-                            <a class="nav-link custom-color-dark" text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
+
+                            <a class="nav-link custom-color-dark"  asp-area="Admin" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
                             
                         }
 

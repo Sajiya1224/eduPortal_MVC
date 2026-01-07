@@ -1,11 +1,31 @@
 ﻿@model BrowseCourseVM
 @{
-    ViewData["Title"] = "Home Page";
+    var currentCategoryId = Context.Request.Query["categoryId"].ToString();
 }
+
+
+<hr class="navbar-divider">
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom-1 box-shadow mb-0 custom-bgcolor-light">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav me-auto">
+                @foreach (var obj in Model.CategoryList)
+                {
+                    <li class="nav-item p-2">
+                        <a class="nav-link custom-color-dark @(currentCategoryId == obj.Id.ToString() ? "active" : "")"
+                           asp-area="Learner" asp-controller="Home" asp-action="BrowseCourse" asp-route-categoryId="@obj.Id">@obj.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
 
 <!-- Hero Section -->
 <div class="mt-0 hero-section d-flex align-items-center justify-content-between flex-column flex-md-row w-100 py-5"
-     style="background: linear-gradient(to bottom, #BDE8F5, #ffffff);">
+style="background: linear-gradient(to bottom, #BDE8F5, #ffffff);">
 
     <!-- Left Content -->
     <div class="container-fluid px-5 px-md-5">
@@ -37,20 +57,14 @@
 </div>
 
 <!-- Search bar  -->
-<div class="p-5 mt-3 mb-3">
-    <form class="d-flex mx-auto custom-search">
-        <input class="form-control rounded-pill search-input border-2"
-        type="search"
-        placeholder="Search courses..."
-        aria-label="Search">
-    </form>
-</div>
-
-@* <div class="input-group mt-5 p-3 " style="max-width: 800px; margin: auto;"> *@
-@*     <input type="text" class="form-control rounded p-3 bg-light text-dark" placeholder="Search courses..." aria-label="Search courses"> *@
-@*     <button class="btn btn-secondary" type="button">Search</button> *@
+@* <div class="p-5 mt-3 mb-3"> *@
+@*     <form class="d-flex mx-auto custom-search"> *@
+@*         <input class="form-control rounded-pill search-input border-2" *@
+@*         type="search" *@
+@*         placeholder="Search courses..." *@
+@*         aria-label="Search"> *@
+@*     </form> *@
 @* </div> *@
-
 
 
 <!-- Browse by Category -->
@@ -92,7 +106,7 @@
         <div class="text-center mt-4">
             <div class="row g-2">
 
-                @foreach (var course in Model.videoCourse.Take(4))
+                @foreach (var course in Model.videoCourse.Take(10))
                     {
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <a asp-controller="Home" asp-action="Details" asp-route-VideoCourseId="@course.Id"

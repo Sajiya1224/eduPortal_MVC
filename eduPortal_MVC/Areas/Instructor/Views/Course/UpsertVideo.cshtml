@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="container col-12 custom-color-dark">
-		<form method="post" enctype="multipart/form-data">
+	<form method="post" enctype="multipart/form-data" asp-area="Instructor" asp-controller="Course" asp-action="UpsertVideo">
 			<input asp-for="VideoCourseVm.Id" hidden />
 			<input asp-for="VideoCourseVm.ApplicationUserId" hidden />
 			<!--Basic Information Form-->
@@ -143,7 +143,7 @@
 
 											<div class="form-floating py-2 col-12">
 												<input asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" hidden />
-												<input type="file" name="vidFile" class="form-control border-0 shadow" />
+												<input type="file" name="vidFile[@i][@j]" class="form-control border-0 shadow" />
 												<label asp-for="VideoCourseVm.Sections[@i].Lectures[@j].VideoUrl" class="ms-2"></label>
 											</div>
 										</div>
@@ -235,7 +235,7 @@
 					</div>
 
 					<div class="form-floating py-2 col-12">
-						<input type="file" name="vidFile" class="form-control border-0 shadow" />
+					<input type="file" name="vidFile[INDEX][LECTURE_INDEX]" class="form-control border-0 shadow" />
 						<label>Video URL</label>
 					</div>
 				</div>

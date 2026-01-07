@@ -1,6 +1,6 @@
 ﻿@model AdminDashboardVM
 
-<div class="container mt-4">
+<div class="container mt-4 custom-color-dark">
     <div class="row">
 
         <!-- LEFT SIDE (Table / Main Content) -->
@@ -74,9 +74,9 @@
                 <div class="tab-content">
                     <!-- Curriculum Tab -->
 
-                    <div class="tab-pane fade show mt-4 actve" id="instructor">
+                    <div class="tab-pane fade show mt-4 active" id="instructor">
 
-                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Admin" asp-action="InstructorData">
+                        <a class="btn btn-custom ms-2" asp-area="Admin" asp-controller="Admin" asp-action="InstructorData">
                             <i class="bi bi-eye-fill">View All</i>
                         </a>
                         <div class=" m-lg-0 py-3 text-center">
@@ -103,7 +103,7 @@
                  
 
                     <div class="tab-pane fade show mt-4" id="enrollement">
-                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Enrollement" asp-action="Index">
+                        <a class="btn btn-custom ms-2" asp-area="Admin" asp-controller="Enrollement" asp-action="Index">
                             <i class="bi bi-eye-fill">View All</i>
                         </a>
                         <div class=" m-lg-0 py-3 text-center">
@@ -131,7 +131,7 @@
 
                     <div class="tab-pane fade show mt-4" id="categories">
 
-                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                        <a class="btn btn-custom ms-2" asp-area="Admin" asp-controller="Category" asp-action="Index">
                             <i class="bi bi-eye-fill">View All</i>
                         </a>
                         <div class=" m-lg-0 py-3 text-center">
@@ -153,7 +153,7 @@
                     </div>
                     <div class="tab-pane fade show mt-4" id="users">
 
-                        <a class="btn btn-dark btn-sm ms-2" asp-area="Admin" asp-controller="Admin" asp-action="UserData">
+                        <a class="btn btn-custom ms-2" asp-area="Admin" asp-controller="Admin" asp-action="UserData">
                             <i class="bi bi-eye-fill">View All</i>
                         </a>
                         <div class=" m-lg-0 py-3 text-center">
@@ -213,7 +213,7 @@
                 <div class="d-flex align-items-center gap-3 mt-2">
                     <div>
 
-                        <h6 class="mb-0 fw-bold">Quick Actions</h6>
+                        <h6 class="mb-0 fw-bold custom-color-dark">Quick Actions</h6>
 
                     </div>
                 </div>
@@ -222,27 +222,27 @@
 
                     <div class="p-2">
                         <a asp-area="Admin" asp-controller="Admin" asp-action="InstructorData"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-mortarboard-fill " style="font-size:20px;"></i>  Instructor Request</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-mortarboard-fill " style="font-size:20px;"></i>  Instructor Request</a>
                     </div>
 
                     <div class="p-2">
                         <a asp-area="Admin" asp-controller="Admin" asp-action="UserData"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-person-fill" style="font-size:20px;"></i>  User List</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-person-fill" style="font-size:20px;"></i>  User List</a>
                     </div>
 
                     <div class="p-2">
                       
                         <a asp-area="Instructor" asp-controller="Course" asp-action="Index"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-book" style="font-size:20px;"></i>  Course Details</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-book" style="font-size:20px;"></i>  Course Details</a>
                     </div>
 
                     <div class="p-2">
                         <a asp-area="Admin" asp-controller="Enrollement" asp-action="Index"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-people-fill" style="font-size:20px;"></i>  Enrolled Students</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-people-fill" style="font-size:20px;"></i>  Enrolled Students</a>
                     </div>
                     <div class="p-2">
                         <a asp-area="Admin" asp-controller="Category" asp-action="Index"
-                           class="btn btn-outline-dark p-2" style="width:100%"><i class="bi bi-plus-circle" style="font-size:20px;"></i> Create Category</a>
+                           class="btn btn-custom-outline p-2" style="width:100%"><i class="bi bi-plus-circle" style="font-size:20px;"></i> Create Category</a>
                     </div>
 
                 </div>

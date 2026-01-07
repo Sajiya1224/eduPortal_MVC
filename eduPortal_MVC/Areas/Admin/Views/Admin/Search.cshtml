@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Search Results";
+
+    var courses = ViewBag.Courses as List<VideoCourse>;
+    var courseCount = courses?.Count ?? 0;
+
+    var users = ViewBag.users as List<ApplicationUser>;
+    var userCount = users?.Count ?? 0;
+}
+
+<div class="container mt-4 custom-color-dark">
+    <h2>Search Results for: "@ViewBag.SearchTerm"</h2>
+
+    <!-- Courses Results -->
+    @if (ViewBag.Courses != null && ((List<VideoCourse>)ViewBag.Courses).Any())
+    {
+        <h6 class="mt-4">(@courseCount) Courses Match Found</h6>
+        <div class="row">
+            @foreach (var course in (List<VideoCourse>)ViewBag.Courses)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="@course.ThumbnailUrl" class="card-img-top" alt="@course.Title">
+                        <div class="card-body">
+                            <h5 class="card-title">@course.Title</h5>
+                            <p class="card-text">@Html.Raw(course.Description?.Length > 100 ? course.Description.Substring(0, 100) + "..." : course.Description)</p>
+                            <a asp-area="Learner" asp-controller="Home" asp-action="Details" asp-route-VideoCourseId="@course.Id" class="btn btn-custom">View Course</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Users Results -->
+    @if (ViewBag.Users != null && ((List<ApplicationUser>)ViewBag.Users).Any())
+    {
+        <h6 class="mt-4">(@userCount) Users Match Found</h6>
+        <div class="list-group">
+            @foreach (var user in (List<ApplicationUser>)ViewBag.Users)
+            {
+                <a asp-area="Admin" asp-controller="Admin" asp-action="InstructorDetail" asp-route-id="@user.Id" class="list-group-item">
+                    <h5>@user.Name</h5>
+                    <p class="mb-1">@user.Email</p>
+                </a>
+            }
+        </div>
+    }
+
+    @if ((ViewBag.Courses == null || !((List<VideoCourse>)ViewBag.Courses).Any()) &&
+    (ViewBag.Users == null || !((List<ApplicationUser>)ViewBag.Users).Any()))
+    {
+        <div class="alert alert-info mt-4">
+            <p>No results found for "@ViewBag.SearchTerm"</p>
+        </div>
+    }
+</div>

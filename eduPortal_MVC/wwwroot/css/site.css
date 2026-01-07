@@ -220,3 +220,12 @@ body {
     .btn-custom-outline:hover {
         background: #4988C4;
     }
+
+
+
+.navbar-divider {
+    border: none;
+    height: 2px;
+    background-color: black;
+    margin: 0;
+}
